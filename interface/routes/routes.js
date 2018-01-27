@@ -9,9 +9,9 @@ vogels.AWS.config.update({accessKeyId: creds.accessKeyId, secretAccessKey: creds
 
 var Account = vogels.define('Account', {
   hashKey : 'username',
-  
+
   timestamps : true,
-  
+
   schema : {
     username: Joi.string(),
     email   : Joi.string().email(),
@@ -93,7 +93,7 @@ var postJob = function(req, res) {
                 status : 'Incomplete'
             }, function(err, post) {
                 if (err) {
-                    res.render('index.ejs', { error: 'Error accessing database' , balance: '0'});   
+                    res.render('index.ejs', { error: 'Error accessing database' , balance: '0'});
                 } else {
                     Job.scan().loadAll().exec(function(err, resp) {
                         if (resp) {
@@ -115,7 +115,7 @@ var postJob = function(req, res) {
                 }
     });
 
-    res.render('index.ejs', { name: 'Bob' , balance: '0', error: null});   
+    res.render('index.ejs', { name: 'Bob' , balance: '0', error: null});
 }
 
 var routes = {
