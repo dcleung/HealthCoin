@@ -3,7 +3,7 @@ var async = require('async');
 var vogels = require('vogels');
 var Joi = require('joi');
 var AWS = require('aws-sdk');
-vogels.AWS.config.loadFromPath('credentials.json');
+//vogels.AWS.config.loadFromPath('credentials.json');
 
 var Account = vogels.define('Account', {
   hashKey : 'username',
@@ -16,27 +16,20 @@ var Account = vogels.define('Account', {
 
 /* GET home page. */
 var getHome = function(req, res) {
-  res.render('index.ejs', { name: 'Bob' , balance: '0', error: null});
+    console.log("GET home");
+    res.render('index.ejs', { name: 'Bob' , balance: '0', error: null});
 }
 
 /* GET visualizer page. */
 var getVisualizer = function(req, res) {
-  res.render('visual.ejs', { name: 'Bob' , balance: '0', error: null});
+    console.log("GET visualizer");
+    res.render('visualizer.ejs', { name: 'Bob' , balance: '0', error: null});
 }
 
 /* GET about page. */
 var getAbout = function(req, res) {
-  res.render('about.ejs', { name: 'Bob' , balance: '0', error: null});
-}
-
-/* GET visualizer page. */
-var getVisualizer = function(req, res) {
-  res.render('visual.ejs', { name: 'Bob' , balance: '0', error: null});
-}
-
-/* GET about page. */
-var getAbout = function(req, res) {
-  res.render('about.ejs', { name: 'Bob' , balance: '0', error: null});
+    console.log("GET visualizer");
+    res.render('about.ejs', { name: 'Bob' , balance: '0', error: null});
 }
 
 /* POST job page. */
