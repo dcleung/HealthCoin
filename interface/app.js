@@ -23,6 +23,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes.getHome);
 app.use('/postnewjob', routes.postJob);
+app.use('/about', routes.getAbout);
+app.use('/visualizer', routes.getVisualizer);
+
 
 
 module.exports = app;
