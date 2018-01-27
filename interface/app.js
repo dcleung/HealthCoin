@@ -13,6 +13,11 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use(express.bodyParser());
+app.use(express.logger("default"));
+app.use(express.cookieParser());
+app.use(express.session({secret: 'secretThing', username: "derex.leung@gmail.com"}));
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -24,6 +29,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/postnewjob', routes.postJob);
 app.use('/about', routes.getAbout);
 app.use('/visualizer', routes.getVisualizer);
+app.use('/mine', routes.getMine);
+
+// DEFAULT
 app.use('/', routes.getHome);
 
 

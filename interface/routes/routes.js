@@ -3,10 +3,14 @@ var async = require('async');
 var vogels = require('vogels');
 var Joi = require('joi');
 var AWS = require('aws-sdk');
-//vogels.AWS.config.loadFromPath('credentials.json');
+var creds = require('./credentials.json');
+//vogels.AWS.config.loadFromPath('./credentials.json');
+vogels.AWS.config.update({accessKeyId: creds.accessKeyId, secretAccessKey: creds.secretAccessKey, region: "us-east-1"});
 
 var Account = vogels.define('Account', {
   hashKey : 'username',
+
+  timestamps : true,
 
   schema : {
     username: Joi.string(),
@@ -16,10 +20,40 @@ var Account = vogels.define('Account', {
   }
 });
 
+var Job = vogels.define('Job', {
+  hashKey : 'JobID',
+
+  timestamps : true,
+
+  schema : {
+    JobID: vogels.types.uuid(),
+    name    : Joi.string(),
+    genome : Joi.string(),
+    cost : Joi.number(),
+    status : Joi.string()
+  }
+});
+
+vogels.createTables({
+    'Account' : {readCapacity: 1, writeCapacity: 10},
+    'Job' : {readCapacity: 1, writeCapacity: 10},
+}, function (err) {
+  if(err) {
+    console.log('Error creating tables', err);
+    process.exit(1);
+  }
+});
+
 /* GET home page. */
 var getHome = function(req, res) {
     console.log("GET home");
     res.render('index.ejs', { name: 'Bob' , balance: '0', error: null});
+}
+
+/* GET mining page. */
+var getMine = function(req, res) {
+    console.log("GET mine");
+    res.render('mine.ejs', { name: 'Bob' , balance: '0', error: null});
 }
 
 /* GET visualizer page. */
@@ -38,16 +72,46 @@ var getAbout = function(req, res) {
 var postJob = function(req, res) {
     var cost = req.body.inputCost;
     var name = req.body.inputName;
-    console.log(cost);
-    console.log(name);
-    res.redirect('/', { name: 'Bob' , balance: 'poop', error: null});
+    var genome = req.body.inputGenome;
+
+    Job.create({
+                cost : cost,
+                name : name,
+                genome : genome,
+                status : 'Incomplete'
+            }, function(err, post) {
+                if (err) {
+                    res.render('index.ejs', { error: 'Error accessing database' , balance: '0'});
+                } else {
+                    Job.scan().loadAll().exec(function(err, resp) {
+                        if (resp) {
+                            items = resp.Items;
+                            console.log(resp);
+                            /*items.sort(function(a, b) {
+                                return parseFloat(a.attrs.msgID) - parseFloat(b.attrs.msgID);
+                            });
+                            var size = Object.keys(items).length;
+                            for (var i = 0; i < size; i++) {
+                                console.log(items[i].attrs.message);
+                                chatValues.push(items[i].attrs.message);
+                            }*/
+                        }
+                        res.render('index.ejs', {
+                            name: 'Bob' , balance: '0', error: null
+                        });
+                    });
+                }
+    });
+
+    res.render('index.ejs', { name: 'Bob' , balance: '0', error: null});
 }
 
 var routes = {
     getHome : getHome,
     postJob : postJob,
     getVisualizer : getVisualizer,
-    getAbout : getAbout
+    getAbout : getAbout,
+    getMine : getMine
 };
 
 module.exports = routes;
