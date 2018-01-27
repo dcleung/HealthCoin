@@ -29,6 +29,16 @@ var getAbout = function(req, res) {
   res.render('about.ejs', { name: 'Bob' , balance: '0', error: null});
 }
 
+/* GET visualizer page. */
+var getVisualizer = function(req, res) {
+  res.render('visual.ejs', { name: 'Bob' , balance: '0', error: null});
+}
+
+/* GET about page. */
+var getAbout = function(req, res) {
+  res.render('about.ejs', { name: 'Bob' , balance: '0', error: null});
+}
+
 /* POST job page. */
 var postJob = function(req, res) {
     var cost = req.body.inputCost;
