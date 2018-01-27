@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
     <link rel="stylesheet" href="https://unpkg.com/tachyons@4.9.1/css/tachyons.min.css"/>
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-default">
@@ -45,7 +46,7 @@
 <<<<<<< HEAD
         <form action="/postnewjob" method="post">
           <form method="POST" action="uploadFile" enctype="multipart/form-data">
-            <p>Upload your code:</p> 
+            <p>Upload your code:</p>
             <input type="file" name="file" />
             </form>
             <br>
@@ -62,7 +63,7 @@
             <br>
             <br>
             <form method="POST" action="uploadFile" enctype="multipart/form-data" >
-                <p>Upload your health dataset(s):</p> 
+                <p>Upload your health dataset(s):</p>
                 <input type="file" name="file"/>
             </form>
             <br>
@@ -97,6 +98,10 @@
         messagingSenderId: "803479901927"
       };
       firebase.initializeApp(config);
+
+      //Replace Icons
+      feather.replace()
+
     </script>
 
   </body>
