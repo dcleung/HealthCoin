@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
+    <title>HealthCoin</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
@@ -17,49 +17,84 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">ComputeCoin</a>
+          <a class="navbar-brand" href="#">HealthCoin</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
+            <li><a href="#">About</a></li>
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Add job</a></li>
-            <li><a href="#">Account</a></li>
-            <li><a href="#">Balance: <%= balance %> CC</a></li>
+            <li><a href="#">My Account</a></li>
+            <li><a href="#">My Balance: <%= balance %> HC</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
-        <!-- Adding a new job -->
-        <div style="padding: 50px">
-            <form method="POST" action="uploadFile" enctype="multipart/form-data">
-                <p>Upload your code (in Python):</p> 
-                <input type="file" name="file" />
-            </form>
-            <br>
-            <form method="POST" action="uploadFile" enctype="multipart/form-data" >
-                <p>Upload your dataset(s):</p> 
-                <input type="file" name="file"/>
-            </form>
-            <br>
-            <p>How much are you willing to pay (in ComputeCoins)?</p>
-            <input id="number" type="number">
-            <br>
-            <br>
-            <button type="button" class="btn btn-primary">Submit my job!</button>
-        </div>
 
-        <div>
-            <p>Current jobs:</p>
-        <div>
+    <!-- Adding a new job -->
+    <div style="padding: 50px">
+        <h2>Add a new job:</h2>
+        <p>Name your job:</p>
+        <input id="name" type="string">
+        <br>
+        <br>
+        <form method="POST" action="uploadFile" enctype="multipart/form-data">
+            <p>Upload your code:</p> 
+        <input type="file" name="file" />
+        </form>
+        <br>
+        <p>Select a default framework/method:</p>
+            <input type="radio" id="contactChoice1"
+             name="contact" value="email">
+            <label for="contactChoice1">Tensorflow</label>
 
+            <input type="radio" id="contactChoice2"
+             name="contact" value="phone">
+            <label for="contactChoice2">Hadoop</label>
 
+            <input type="radio" id="contactChoice3"
+             name="contact" value="mail">
+            <label for="contactChoice3">Spark</label>
+        <br>
+        <br>
+        <form method="POST" action="uploadFile" enctype="multipart/form-data" >
+            <p>Upload your health dataset(s):</p> 
+            <input type="file" name="file"/>
+        </form>
+        <br>
+        <p>How much are you willing to pay? (in HealthCoins)</p>
+        <input id="number" type="number">
+        <br>
+        <p><%= error %></p>
+        <br>
+        <button type="button" class="btn btn-primary">Submit my job!</button>
+    </div>
 
+    <div>
+        <h2>My jobs:</h2>
+        <ul class="list-group">
+          <li class="list-group-item list-group-item-success"> [Name of job 1] View Dataset / View Results (Success!)</li>
+          <li class="list-group-item list-group-item-warning"> [Name of job 2] View Dataset (In progress)</li>
+          <li class="list-group-item list-group-item-danger"> [Name of job 3] View Dataset / View Results (FAILED!)</li>
+        </ul>
+    <div>
+
+    <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyA7QjYNq2dAjDCrzzgagzOnx5dKvwY1T2g",
+        authDomain: "computecoin.firebaseapp.com",
+        databaseURL: "https://computecoin.firebaseio.com",
+        projectId: "computecoin",
+        storageBucket: "computecoin.appspot.com",
+        messagingSenderId: "803479901927"
+      };
+      firebase.initializeApp(config);
+    </script>
 
   </body>
 </html>
