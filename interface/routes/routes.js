@@ -5,19 +5,34 @@ var Joi = require('joi');
 var AWS = require('aws-sdk');
 
 /* GET home page. */
-var getHome = function(req, res, next) {
-  res.render('index', { name: 'Bob' , balance: '0', error: null});
+var getHome = function(req, res) {
+  res.render('index.ejs', { name: 'Bob' , balance: '0', error: null});
 }
 
+/* GET visualizer page. */
+var getVisualizer = function(req, res) {
+  res.render('visual.ejs', { name: 'Bob' , balance: '0', error: null});
+}
+
+/* GET about page. */
+var getAbout = function(req, res) {
+  res.render('about.ejs', { name: 'Bob' , balance: '0', error: null});
+}
+
+/* POST job page. */
 var postJob = function(req, res) {
     var cost = req.body.inputCost;
+    var name = req.body.inputName;
     console.log(cost);
-    res.render('index', { name: 'Bob' , balance: '0', error: null});    
+    console.log(name);
+    res.redirect('/', { name: 'Bob' , balance: 'poop', error: null});   
 }
 
 var routes = {
     getHome : getHome,
-    postJob : postJob
+    postJob : postJob,
+    getVisualizer : getVisualizer,
+    getAbout : getAbout
 };
 
 module.exports = routes;
