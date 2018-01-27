@@ -7,12 +7,12 @@ var AWS = require('aws-sdk');
 
 var Account = vogels.define('Account', {
   hashKey : 'username',
-    
+
   schema : {
-    username: Joi.string().username(),
+    username: Joi.string(),
     email   : Joi.string().email(),
     name    : Joi.string(),
-    password : Joi.string().password()
+    password : Joi.string()
   }
 });
 
@@ -40,7 +40,7 @@ var postJob = function(req, res) {
     var name = req.body.inputName;
     console.log(cost);
     console.log(name);
-    res.redirect('/', { name: 'Bob' , balance: 'poop', error: null});   
+    res.redirect('/', { name: 'Bob' , balance: 'poop', error: null});
 }
 
 var routes = {

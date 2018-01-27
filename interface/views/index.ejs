@@ -3,13 +3,24 @@
   <head>
     <title>HealthCoin</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+    <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css"> -->
     <link rel="stylesheet" href="https://unpkg.com/tachyons@4.9.1/css/tachyons.min.css"/>
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
   </head>
-  <body>
+  <body class="">
+    <!-- /*white bg-black is-in*/ -->
+    <header class="cf ph3">
+            <h1 class="fr-ns mb0 mt3 pt1"><a href="" class="link red">h<span class="dib-l dib-m dn">lth</span>.chain</a></h1>
+            <nav class="fl-ns mt3 pt3">
+              <a href="" class="b link dark-gray hover-red bb bw1 pb1"><i data-feather="eye"></i></a>
+              <a href="" class="b link dark-gray hover-red ml3"><i data-feather="help-circle"></i></a>
+            </nav>
+    </header>
     <nav class="navbar navbar-default">
+
+
+
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -25,8 +36,8 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a href="/about">About</a></li>
-            <li><a href="/visualizer">Visualizer</a></li>
+            <li><a href="/about"><i data-feather="help-circle"></i></a></li>
+            <li><a href="/visualizer"></a></li>
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
@@ -84,5 +95,8 @@
           <li class="list-group-item list-group-item-danger"> [Name of job 3] View Dataset / View Results (FAILED!)</li>
         </ul>
     <div>
+    <script>
+      feather.replace()
+    </script>
   </body>
 </html>
