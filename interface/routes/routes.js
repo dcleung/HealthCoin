@@ -9,8 +9,10 @@ var Account = vogels.define('Account', {
   hashKey : 'username',
     
   schema : {
+    username: Joi.string().username(),
     email   : Joi.string().email(),
     name    : Joi.string(),
+    password : Joi.string().password()
   }
 });
 
