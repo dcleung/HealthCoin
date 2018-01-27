@@ -41,36 +41,39 @@
         <input id="name" type="string">
         <br>
         <br>
-        <form method="POST" action="uploadFile" enctype="multipart/form-data">
+        <form action="/postnewjob" method="post">
+          <form method="POST" action="uploadFile" enctype="multipart/form-data">
             <p>Upload your code:</p> 
-        <input type="file" name="file" />
-        </form>
-        <br>
-        <p>Select a default framework/method:</p>
-            <input type="radio" id="contactChoice1"
-             name="contact" value="email">
-            <label for="contactChoice1">Tensorflow</label>
+            <input type="file" name="file" />
+            </form>
+            <br>
+            <p>Select a default framework/method:</p>
+                <input type="radio" id="framework1"
+                 name="contact" value="tensorflow">
+                <label for="contactChoice1">Tensorflow</label>
 
-            <input type="radio" id="contactChoice2"
-             name="contact" value="phone">
-            <label for="contactChoice2">Hadoop</label>
+                <input type="radio" id="framework2"
+                 name="contact" value="hadoop">
+                <label for="contactChoice2">Hadoop</label>
 
-            <input type="radio" id="contactChoice3"
-             name="contact" value="mail">
-            <label for="contactChoice3">Spark</label>
-        <br>
-        <br>
-        <form method="POST" action="uploadFile" enctype="multipart/form-data" >
-            <p>Upload your health dataset(s):</p> 
-            <input type="file" name="file"/>
+                <input type="radio" id="framework3"
+                 name="contact" value="spark">
+                <label for="contactChoice3">Spark</label>
+            <br>
+            <br>
+            <form method="POST" action="uploadFile" enctype="multipart/form-data" >
+                <p>Upload your health dataset(s):</p> 
+                <input type="file" name="file"/>
+            </form>
+            <br>
+            <p>How much are you willing to pay? (in HealthCoins)</p>
+            <input id="number" type="number">
+            <br>
+            <p><%= error %></p>
+
+            <br>
+            <button type="button" class="btn btn-primary" name="new-job" value="upvote">Submit my job! </button>
         </form>
-        <br>
-        <p>How much are you willing to pay? (in HealthCoins)</p>
-        <input id="number" type="number">
-        <br>
-        <p><%= error %></p>
-        <br>
-        <button type="button" class="btn btn-primary">Submit my job!</button>
     </div>
 
     <div>
