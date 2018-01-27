@@ -47,20 +47,21 @@ vogels.createTables({
 /* GET home page. */
 var getHome = function(req, res) {
     Job.scan().loadAll().exec(function(err, resp) {
+        var itemValues = [];
         if (resp) {
             items = resp.Items;
-            console.log(resp.Items);
             /*items.sort(function(a, b) {
                 return parseFloat(a.attrs.msgID) - parseFloat(b.attrs.msgID);
-            });
+            });*/
             var size = Object.keys(items).length;
             for (var i = 0; i < size; i++) {
-                console.log(items[i].attrs.message);
-                chatValues.push(items[i].attrs.message);
-            }*/
+                console.log(items[i].attrs);
+                itemValues.push(items[i].attrs);
+            }
         }
+        console.log(itemValues);
         res.render('index.ejs', {
-            name: 'Bob' , balance: '0', error: null
+            name: 'Bob' , balance: '0', error: null, items : itemValues
         });
     });
 }
@@ -96,26 +97,22 @@ var postJob = function(req, res) {
                     res.render('index.ejs', { error: 'Error accessing database' , balance: '0'});
                 } else {
                     Job.scan().loadAll().exec(function(err, resp) {
+                        var itemValues = [];
                         if (resp) {
                             items = resp.Items;
-                            console.log(resp.Items);
                             /*items.sort(function(a, b) {
                                 return parseFloat(a.attrs.msgID) - parseFloat(b.attrs.msgID);
-                            });
+                            });*/
                             var size = Object.keys(items).length;
                             for (var i = 0; i < size; i++) {
-                                console.log(items[i].attrs.message);
-                                chatValues.push(items[i].attrs.message);
-                            }*/
+                                console.log(items[i].attrs);
+                                itemValues.push(items[i].attrs);
+                            }
                         }
-                        res.render('index.ejs', {
-                            name: 'Bob' , balance: '0', error: null
-                        });
+                        res.redirect('/');
                     });
                 }
     });
-
-    res.render('index.ejs', { name: 'Bob' , balance: '0', error: null});
 }
 
 var routes = {
