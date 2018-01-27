@@ -38,12 +38,10 @@
     <!-- Adding a new job -->
     <div style="padding: 50px">
         <h2>Add a new job:</h2>
-        <p>Name your job:</p>
-        <input id="name" type="string">
-        <br>
-        <br>
-<<<<<<< HEAD
         <form action="/postnewjob" method="post">
+        <p>Name your job:</p>
+        <input class="input-field form-control" type="text" name="inputName">
+        <br>
           <form method="POST" action="uploadFile" enctype="multipart/form-data">
             <p>Upload your code:</p> 
             <input type="file" name="file" />
@@ -67,12 +65,12 @@
             </form>
             <br>
             <p>How much are you willing to pay? (in HealthCoins)</p>
-            <input id="number" type="number">
+            <input class="input-field form-control" type="number" name="inputCost" placeholder="100">
             <br>
             <p><%= error %></p>
 
             <br>
-            <button type="button" class="btn btn-primary" name="new-job" value="upvote">Submit my job! </button>
+            <button type="button" class="btn btn-primary" name="new-job">Submit my job!</button>
         </form>
     </div>
 
@@ -84,20 +82,5 @@
           <li class="list-group-item list-group-item-danger"> [Name of job 3] View Dataset / View Results (FAILED!)</li>
         </ul>
     <div>
-
-    <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
-    <script>
-      // Initialize Firebase
-      var config = {
-        apiKey: "AIzaSyA7QjYNq2dAjDCrzzgagzOnx5dKvwY1T2g",
-        authDomain: "computecoin.firebaseapp.com",
-        databaseURL: "https://computecoin.firebaseio.com",
-        projectId: "computecoin",
-        storageBucket: "computecoin.appspot.com",
-        messagingSenderId: "803479901927"
-      };
-      firebase.initializeApp(config);
-    </script>
-
   </body>
 </html>
