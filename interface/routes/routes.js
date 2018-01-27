@@ -46,25 +46,37 @@ vogels.createTables({
 
 /* GET home page. */
 var getHome = function(req, res) {
-    console.log("GET home");
-    res.render('index.ejs', { name: 'Bob' , balance: '0', error: null});
+    Job.scan().loadAll().exec(function(err, resp) {
+        if (resp) {
+            items = resp.Items;
+            console.log(resp.Items);
+            /*items.sort(function(a, b) {
+                return parseFloat(a.attrs.msgID) - parseFloat(b.attrs.msgID);
+            });
+            var size = Object.keys(items).length;
+            for (var i = 0; i < size; i++) {
+                console.log(items[i].attrs.message);
+                chatValues.push(items[i].attrs.message);
+            }*/
+        }
+        res.render('index.ejs', {
+            name: 'Bob' , balance: '0', error: null
+        });
+    });
 }
 
 /* GET mining page. */
 var getMine = function(req, res) {
-    console.log("GET mine");
     res.render('mine.ejs', { name: 'Bob' , balance: '0', error: null});
 }
 
 /* GET visualizer page. */
 var getVisualizer = function(req, res) {
-    console.log("GET visualizer");
     res.render('visualizer.ejs', { name: 'Bob' , balance: '0', error: null});
 }
 
 /* GET about page. */
 var getAbout = function(req, res) {
-    console.log("GET visualizer");
     res.render('about.ejs', { name: 'Bob' , balance: '0', error: null});
 }
 
@@ -86,7 +98,7 @@ var postJob = function(req, res) {
                     Job.scan().loadAll().exec(function(err, resp) {
                         if (resp) {
                             items = resp.Items;
-                            console.log(resp);
+                            console.log(resp.Items);
                             /*items.sort(function(a, b) {
                                 return parseFloat(a.attrs.msgID) - parseFloat(b.attrs.msgID);
                             });
