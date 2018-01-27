@@ -11,10 +11,7 @@
   <body class="">
     <!-- /*white bg-black is-in*/ -->
     <header class="cf ph3">
-            <h1 class="fl-ns mb0 mt3 pt1"><a href="" class="link red">h<span class="dib-l dib-m dn">lth</span>.chain</a>
-
-
-            </h1>
+            <h1 class="fl-ns mb0 mt3 pt1"><a href="" class="link red">h<span class="dib-l dib-m dn">lth</span>.chain</a></h1>
 
             <nav class="fr-ns">
 
@@ -34,20 +31,20 @@
 
     <h3>HealthCoin - Mining for <i>Your</i> Health</h3>
 
-    <!-- Adding a new job -->
-    <div style="padding: 50px">
-        <h2>Add a new job:</h2>
-        <form action="/postnewjob" method="post">
-        <p>Name your job:</p>
-        <input class="input-field form-control" type="text" name="inputName" placeholder="Bob's Job">
-        <br>
-        <p>Insert your genome:</p>
-        <input class="input-field form-control" type="text" name="inputGenome" placeholder="AC, AA, TC, GC">
-        <br>
-        <p>How much are you willing to pay? (in HealthCoins)</p>
-        <input class="input-field form-control" type="number" name="inputCost" placeholder="100">
-        <br>
-        <p><%= error %></p>
+        <!-- Adding a new job -->
+        <div style="padding: 50px">
+            <h2>Add a new job:</h2>
+            <form action="/postnewjob" method="post">
+            <p>Name your job:</p>
+            <input class="input-field form-control" type="text" name="inputName" placeholder="Bob's Job">
+            <br>
+            <p>Insert your genome:</p>
+            <input class="input-field form-control" type="text" name="inputGenome" placeholder="AC, AA, TC, GC">
+            <br>
+            <p>How much are you willing to pay? (in HealthCoins)</p>
+            <input class="input-field form-control" type="number" name="inputCost" placeholder="100">
+            <br>
+            <p><%= error %></p>
 
             <br>
             <button type="submit" class="btn btn-primary" name="new-job">Submit my job!</button>
@@ -55,27 +52,27 @@
     </div>
 
     <div>
-        <h2>My jobs:</h2>
-          <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">JobID</th>
-                    <th scope="col">Date Submitted</th>
-                    <th scope="col">Genome</th>
-                    <th scope="col">Cost (in HealthCoins)</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>xxxxs</td>
-                    <td>1/1/18</td>
-                    <td>[AC, CG, TC]</td>
-                    <td>100</td>
-                    <td>Incomplete</td>
-                  </tr>
-                </tbody>
-            </table>
+      <h2>My jobs:</h2>
+        <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">JobID</th>
+                  <th scope="col">Date Submitted</th>
+                  <th scope="col">Genome</th>
+                  <th scope="col">Cost (in HealthCoins)</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>xxxxs</td>
+                  <td>1/1/18</td>
+                  <td>[AC, CG, TC]</td>
+                  <td>100</td>
+                  <td>Incomplete</td>
+                </tr>
+              </tbody>
+          </table>
     <div>
     <script>
       feather.replace()
