@@ -27,6 +27,7 @@
           <ul class="nav navbar-nav">
             <li><a href="/about">About</a></li>
             <li><a href="/visualizer">Visualizer</a></li>
+            <li><a href="/mine">Mine</a></li>
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
@@ -37,39 +38,22 @@
       </div><!-- /.container-fluid -->
     </nav>
 
+    <h3>HealthCoin - Mining for <i>Your</i> Health</h3>
+
     <!-- Adding a new job -->
     <div style="padding: 50px">
         <h2>Add a new job:</h2>
         <form action="/postnewjob" method="post">
         <p>Name your job:</p>
-        <input class="input-field form-control" type="text" name="inputName">
+        <input class="input-field form-control" type="text" name="inputName" placeholder="Bob's Job">
         <br>
-          <form method="POST" action="uploadFile" enctype="multipart/form-data">
-            <p>Upload your code:</p>
-            <input type="file" name="file" />
-            </form>
-            <br>
-            <p>Select a default framework/method:</p>
-                <input type="radio" id="framework1"
-                 name="contact" value="tensorflow">
-                <label for="contactChoice1">Tensorflow</label>
-                <input type="radio" id="framework2"
-                 name="contact" value="hadoop">
-                <label for="contactChoice2">Hadoop</label>
-                <input type="radio" id="framework3"
-                 name="contact" value="spark">
-                <label for="contactChoice3">Spark</label>
-            <br>
-            <br>
-            <form method="POST" action="uploadFile" enctype="multipart/form-data" >
-                <p>Upload your health dataset(s):</p>
-                <input type="file" name="file"/>
-            </form>
-            <br>
-            <p>How much are you willing to pay? (in HealthCoins)</p>
-            <input class="input-field form-control" type="number" name="inputCost" placeholder="100">
-            <br>
-            <p><%= error %></p>
+        <p>Insert your genome:</p>
+        <input class="input-field form-control" type="text" name="inputGenome" placeholder="AC, AA, TC, GC">
+        <br>
+        <p>How much are you willing to pay? (in HealthCoins)</p>
+        <input class="input-field form-control" type="number" name="inputCost" placeholder="100">
+        <br>
+        <p><%= error %></p>
 
             <br>
             <button type="submit" class="btn btn-primary" name="new-job">Submit my job!</button>
@@ -78,11 +62,26 @@
 
     <div>
         <h2>My jobs:</h2>
-        <ul class="list-group">
-          <li class="list-group-item list-group-item-success"> [Name of job 1] View Dataset / View Results (Success!)</li>
-          <li class="list-group-item list-group-item-warning"> [Name of job 2] View Dataset (In progress)</li>
-          <li class="list-group-item list-group-item-danger"> [Name of job 3] View Dataset / View Results (FAILED!)</li>
-        </ul>
+          <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">JobID</th>
+                    <th scope="col">Date Submitted</th>
+                    <th scope="col">Genome</th>
+                    <th scope="col">Cost (in HealthCoins)</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>xxxxs</td>
+                    <td>1/1/18</td>
+                    <td>[AC, CG, TC]</td>
+                    <td>100</td>
+                    <td>Incomplete</td>
+                  </tr>
+                </tbody>
+            </table>
     <div>
   </body>
 </html>
