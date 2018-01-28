@@ -6,6 +6,9 @@ var AWS = require('aws-sdk');
 var creds = require('./credentials.json');
 vogels.AWS.config.update({accessKeyId: creds.accessKeyId, secretAccessKey: creds.secretAccessKey, region: "us-east-1"});
 
+// Establish the "healthy" patient
+var test = ['AA', 'CG', 'TG', 'AC', 'AC', 'AA', 'TC', 'GC', 'TT', 'CT', 'AC', 'AG', 'AT'];
+
 var Account = vogels.define('Account', {
   hashKey : 'username',
 
@@ -32,6 +35,8 @@ var Job = vogels.define('Job', {
     name    : Joi.string(),
     genome : Joi.string(),
     cost : Joi.number(),
+    inx : Joi.number(),
+    ans : Joi.string(),
     status : Joi.string(),
     user : Joi.string()
   }
@@ -48,6 +53,7 @@ var Block = vogels.define('Block', {
     previousHash : Joi.string(),
     timestamp : Joi.number(),
     data : {
+      problemID : Joi.string(),
       start      : Joi.number(),
       matches : vogels.types.numberSet()
     },
@@ -86,7 +92,8 @@ vogels.createTables({
 
 /* GET home page. */
 var getHome = function(req, res) {
-    console.log(req.session)
+    console.log(req.body)
+    console.log(req.param('id'))
     if (!req.session.username) {
         res.render('signup.ejs', {error : null, userID : req.session.userID });
     }
@@ -103,13 +110,11 @@ var getHome = function(req, res) {
                     }
 
                     items2 = resp2.Items;
-                    console.log(items2);
                     var size2 = Object.keys(items2).length;
                     for (var j = 0; j < size2; j++) {
                         transValues.push(items2[j].attrs);
                     }
                 }
-                console.log(transValues);
                 res.render('index.ejs', {
                     name: req.session.username , balance: req.session.balance , error: req.session.message, items : itemValues, userID : req.session.userID, transactions : transValues
                 });
@@ -148,6 +153,24 @@ var postJob = function(req, res) {
     var name = req.body.inputName;
     var genome = req.body.inputGenome;
 
+    // Replace white spaces
+    genome = genome.replace(/\s/g, "");
+    var arr = genome.split(",");
+
+    var testEntries = [];
+    var inx = 0;
+
+    for (j = 0; j < arr.length - 1; j++) {
+        if (arr[j] === test[j] && arr[j + 1] === test[j + 1]) {
+            inx = j;
+        }
+    }
+
+    for (i = 0; i < arr.length; i++) {
+        if (arr[i] != test[i]) {
+            testEntries.push(i);
+        }
+    }
 
     if (!cost || !name || !genome) {
         req.session.message = "missing inputs";
@@ -158,6 +181,8 @@ var postJob = function(req, res) {
                     name : name,
                     genome : genome,
                     status : 'Incomplete',
+                    inx : inx,
+                    ans : testEntries.toString(),
                     user : req.session.username
                 }, function(err, post) {
                     if (err) {
@@ -218,11 +243,6 @@ var postAccount = function(req, res) {
                     req.session.message = err;
                     res.redirect('/')
                 } else {
-
-
-
-
-
                     res.redirect('/');
                 }
     });

@@ -17,7 +17,7 @@
         var numberMatch = 0.0;
         var numberNotMatch = 0.0;
         for (var j = 0; j < targetDNA.length; i++) {
-            if (genome[i + j].equals(targetDNA[j])) {
+            if ((i + j < genome.length - 1) && genome[i + j].equals(targetDNA[j])) {
                 numberMatch++;
             } else {
                 numberNotMatch++;
