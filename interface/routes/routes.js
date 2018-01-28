@@ -191,7 +191,7 @@ var getSignup = function(req, res) {
 }
 
 /* receive the answer */
-var postanswer function(req, res) {
+var postanswer = function(req, res) {
     var answer = req.body;
     // Do something with the answer and thus block
 }
