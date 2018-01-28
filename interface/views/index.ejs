@@ -21,7 +21,7 @@
           <img src="http://tachyons.io/img/logo.jpg" class="br-100 h2 w2 dib" alt="avatar">
           <ul class="dib list pl0">
             <li class="link">My Balance</li>
-            <li class="link"><%= balance %> HC</li>
+            <li class="link"><%= balance %> HTC</li>
           </ul>
         </div>
 
@@ -84,7 +84,7 @@
               <th scope="col" class="pv2 ph3 ttu tl f6 fw6 tt">Sequence Name</th>
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Date Submitted</th>
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Genome</th>
-              <th scope="col" class="f6 ttu fw6 pv2 ph3">Payment (in HealthCoins)</th>
+              <th scope="col" class="f6 ttu fw6 pv2 ph3">Payment (HTC)</th>
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Status</th>
             </tr>
             <% for(var i=0; i < items.length; i++) { %>
@@ -113,8 +113,8 @@
       <form class="" action="/posttransaction" method="post">
 
       <div class="">
-        <p>Recipient's Wallet Key:</p>
-        <input class="" type="text" name="inputWallet" placeholder="c329b19-0537-4755-bfdf-9c908e3b0664">
+        <p>Recipient's User Name:</p>
+        <input class="" type="text" name="inputWallet" placeholder="JaneDoe">
       </div>
 
       <div class="">
@@ -138,7 +138,7 @@
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Received Time</th>
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Sender</th>
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Receiver</th>
-              <th scope="col" class="f6 ttu fw6 pv2 ph3">Amount</th>
+              <th scope="col" class="f6 ttu fw6 pv2 ph3">Amount (HTC)</th>
             </tr>
 
             <% for(var i=0; i < transactions.length; i++) { %>

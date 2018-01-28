@@ -102,6 +102,13 @@ var getHome = function(req, res) {
     if (!req.session.username) {
         res.render('signup.ejs', {error : null, userID : req.session.userID });
     }
+    var value = 0
+    Account.get(req.session.username, function(err, resp) {
+        if (!err) {
+            value = resp.get('value');
+        }
+    });
+
     Job.scan().where('user').equals(req.session.username).loadAll().exec(function(err, resp) {
         var itemValues = [];
         var transValues = [];
@@ -118,19 +125,25 @@ var getHome = function(req, res) {
                             }
 
                             items2 = resp2.Items;
+                            items2.sort(function(a, b) {
+                                return parseFloat(b.attrs.block) - parseFloat(a.attrs.block);
+                            });
                             var size2 = Object.keys(items2).length;
                             for (var j = 0; j < size2; j++) {
                                 transValues.push(items2[j].attrs);
                             }
 
                             items3 = resp3.Items;
+                            items3.sort(function(a, b) {
+                                return parseFloat(b.attrs.hash) - parseFloat(a.attrs.hash);
+                            });
                             var size3 = Object.keys(items3).length;
                             for (var k = 0; k < size3; k++) {
                                 blocks.push(items3[k].attrs);
                             }
                         }
                         res.render('index.ejs', {
-                            name: req.session.username , blocks : blocks, balance: req.session.balance , error: req.session.message, items : itemValues, userID : req.session.userID, transactions : transValues
+                            name: req.session.username , blocks : blocks, balance: value , error: req.session.message, items : itemValues, userID : req.session.userID, transactions : transValues
                         });
                     })
                 }
@@ -225,7 +238,7 @@ var postTransaction = function(req, res) {
         Transaction.create({
                     block : 'Unconfirmed',
                     confirmed : 'Unconfirmed',
-                    sender : req.session.userID,
+                    sender : req.session.username,
                     receiver : recipient,
                     amount : amount
                 }, function(err, post) {
@@ -312,7 +325,40 @@ var getDNA = function(req, res) {
 }
 
 var getMining = function(req, res) {
-    
+    var numTransactions;
+    Transaction.scan().loadAll().exec(function(err, resp) {
+        if (resp) {
+            items = resp.Items;
+            var size = Object.keys(items).length;
+            var block = blockNum; // Assign to correct block
+            for (var i = 0; i < size; i++) {
+                console.log(items[i]);
+                if (items[i].attrs.confirmed === "Unconfirmed") {
+                    numTransactions++;
+                    var sender = items[i].attrs.sender;
+                    var receiver = items[i].attrs.receiver;
+                    var amount = items[i].attrs.amount;
+                    var newSenderAmt = -1 * amount;
+                    var newReceiverAmt = 0;
+                    Account.update({username : sender, value : {$add : newSenderAmt}}, function (err, acc) {
+                      console.log('incremented age by 1', acc.get('value'));
+                    });
+                    Account.update({username : receiver, value : {$add : amount}}, function (err, acc) {
+                      console.log('incremented age by 1', acc.get('value'));
+                    });
+                    Transaction.update({transID: items[i].attrs.transID, confirmed : "Confirmed", block : blockNum}, function(err, acc) {
+                        if (!err) {
+                            console.log('incremented age by 1', acc.get('unconfirmed'));
+                        } else {
+                            console.log("ERRORRRR");
+                        }
+                    });
+                }
+
+
+            }
+        }
+    });
 
     Block.create({
                     hash : 0,
@@ -320,7 +366,7 @@ var getMining = function(req, res) {
                     start : 0,
                     matches : [],
                     data : {},
-                    transactions : 0
+                    transactions : numTransactions
                 });
     blockNum++;
     res.redirect('/');
