@@ -30,9 +30,8 @@
              var mutation = new Object();
              mutation.index = i;
              mutation.matchRate = matchRate;
-             matches.push(mutation)
+             matches.push(mutation);
          }
-             
      }   
      
      // At this point, we have reached the end of the genome so we go back to the start
@@ -55,7 +54,7 @@
              var mutation = new Object();
              mutation.index = i;
              mutation.matchRate = matchRate;
-             matches.push(mutation)
+             matches.push(mutation);
          }
      }
      
