@@ -4,74 +4,87 @@
     <title>HealthCoin</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css"> -->
     <link rel="stylesheet" href="https://unpkg.com/tachyons@4.9.1/css/tachyons.min.css"/>
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
   </head>
   <body class="">
     <!-- /*white bg-black is-in*/ -->
     <header class="cf ph3">
-            <h1 class="fl-ns mb0 mt3 pt1"><a href="" class="link red">h<span class="dib-l dib-m dn">lth</span>.chain</a></h1>
+      <h1 class="fl-ns mb0 mt3 pt1"><a href="" class="link red">h<span class="dib-l dib-m dn">lth</span>.chain</a></h1>
 
-            <nav class="fr-ns">
+      <nav class="fr-ns">
+        <a href="/about" class="b link dark-gray hover-red bb bw1 pb1"><i data-feather="eye"></i></a>
+        <a href="/visualizer" class="b link dark-gray hover-red ml3 mr4"><i data-feather="help-circle"></i></a>
 
-              <a href="/about" class="b link dark-gray hover-red bb bw1 pb1"><i data-feather="eye"></i></a>
-              <a href="/visualizer" class="b link dark-gray hover-red ml3 mr4"><i data-feather="help-circle"></i></a>
+        <div class="dib">
+          <img src="http://tachyons.io/img/logo.jpg" class="br-100 h2 w2 dib" alt="avatar">
+          <ul class="dib list pl0">
+            <li class="link">My Balance</li>
+            <li class="link"><%= balance %> HC</li>
+          </ul>
+        </div>
 
-              <div class="dib">
-                <img src="http://tachyons.io/img/logo.jpg" class="br-100 h2 w2 dib" alt="avatar">
-                <ul class="dib list pl0">
-                  <li class="link">My Balance</li>
-                  <li class="link"><%= balance %> HC</li>
-                </ul>
-              </div>
-
-            </nav>
+      </nav>
     </header>
 
-    <h3>HealthCoin - Mining for <i>Your</i> Health</h3>
-
         <!-- Adding a new job -->
-        <div style="padding: 50px">
-            <h2>Add a new job:</h2>
-            <form action="/postnewjob" method="post">
-            <p>Name your job:</p>
-            <input class="input-field form-control" type="text" name="inputName" placeholder="Bob's Job">
-            <br>
-            <p>Insert your genome:</p>
-            <input class="input-field form-control" type="text" name="inputGenome" placeholder="AC, AA, TC, GC">
-            <br>
-            <p>How much are you willing to pay? (in HealthCoins)</p>
-            <input class="input-field form-control" type="number" name="inputCost" placeholder="100">
-            <br>
-            <p><%= error %></p>
+    <div class="pa3 flex items-center bb bt">
 
-            <br>
-            <button type="submit" class="btn btn-primary" name="new-job">Submit my job!</button>
+        <form method="POST" action="uploadFile" enctype="multipart/form-data" class="">
+
+          <input id="upload" type="file" class="input-file" name="file-upload"></input>
+
+          <label for="file-upload" class="tc b mh3 ph4 pv3 input-reset ba pa4 b--black bg-transparent grow pointer f6 bg-animate hover-bg-black hover-white">
+            <span class="pr1">Upload gnome file</span>
+            <i data-feather="upload" width="16" class="w1 v-mid"></i>
+          </label>
+
+        </form>
+
+
+        <form class="flex justify-between flex-grow-1 justify-around items-center" action="/postnewjob" method="post">
+
+            <div class="">
+              <p>Insert your genome:</p>
+              <input class="" type="text" name="inputGenome" placeholder="AC, AA, TC, GC">
+            </div>
+
+            <div class="">
+              <p>Payment</p>
+              <input class="" type="number" name="inputCost" placeholder="100">
+              <span><%= error %></span>
+            </div>
+            <div class="">
+
+              <button type="submit" class="tc b ph4 pv3 input-reset ba pa4 b--black bg-transparent grow pointer f6 bg-animate hover-bg-black hover-white" name="new-job">Submit files</button>
+            </div>
+
         </form>
     </div>
 
-    <div style="padding: 50px">
+    <div class="pa3 tl">
+
         <h2>Submitted Sequences:</h2>
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">SequenceID</th>
-              <th scope="col">Date Submitted</th>
-              <th scope="col">Genome</th>
-              <th scope="col">Cost (in HealthCoins)</th>
-              <th scope="col">Status</th>
+        <table class="collapse ba tl br2 b--black-10 pv2 ph3 mt4">
+          <tbody>
+            <tr class="striped--near-white">
+              <th scope="col" class="pv2 ph3 ttu tl f6 fw6 tt">SequenceID</th>
+              <th scope="col" class="f6 ttu fw6 pv2 ph3">Date Submitted</th>
+              <th scope="col" class="f6 ttu fw6 pv2 ph3">Genome</th>
+              <th scope="col" class="f6 ttu fw6 pv2 ph3">Cost (in HealthCoins)</th>
+              <th scope="col" class="f6 ttu fw6 pv2 ph3">Status</th>
             </tr>
-          </thead>
-          <% for(var i=0; i < items.length; i++) { %>
-             <tr>
-               <td><%= items[i].JobID %></td>
-               <td><%= items[i].createdAt %></td>
-               <td><%= items[i].genome %></td>
-               <td><%= items[i].cost %></td>
-               <td><%= items[i].status %></td>
-             </tr>
-          <% } %>
+            <% for(var i=0; i < items.length; i++) { %>
+               <tr class="striped--near-white">
+                 <td class="pv2 ph3"><%= items[i].JobID %></td>
+                 <td class="pv2 ph3"><%= items[i].createdAt %></td>
+                 <td class="pv2 ph3"><%= items[i].genome %></td>
+                 <td class="pv2 ph3"><%= items[i].cost %></td>
+                 <td class="pv2 ph3"><%= items[i].status %></td>
+               </tr>
+            <% } %>
+          </tbody>
           </table>
     <div>
 
