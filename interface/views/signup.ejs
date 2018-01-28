@@ -10,20 +10,35 @@
   </head>
   <body>
     <h3>HealthCoin - Mining for <i>Your</i> Health</h3>
-    <h4>Log in</h4>
-    <form action="/checkaccount" method="post">
-            <p>Username:</p>
-            <input class="input-field form-control" type="text" name="loginUsername">
-            <br>
-            <p>Password:</p>
-            <input class="input-field form-control" type="password" name="loginPassword">
-            <br>
-            <br>
-            <button type="submit" class="btn btn-primary" name="new-job">Log in</button>
-        </form>
 
-        <p><%= error %></p>
 
+    <main class="pa4 black-80">
+      <form class="measure center" action="/checkaccount" method="post">
+        <fieldset id="sign_up" class="ba b--transparent ph0 mh0">
+          <legend class="f4 fw6 ph0 mh0">Sign In</legend>
+          <div class="mt3">
+            <label class="db fw6 lh-copy f6" for="email-address">Username</label>
+            <input class="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="text" name="loginUsername" id="loginUsername">
+          </div>
+          <div class="mv3">
+            <label class="db fw6 lh-copy f6" for="password">Password</label>
+            <input class="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="password" name="loginPassword"  id="password">
+          </div>
+          <label class="pa0 ma0 lh-copy f6 pointer"><input type="checkbox"> Remember me</label>
+        </fieldset>
+        <div class="">
+          <button class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Sign in">Sign In </button>
+        </div>
+        <div class="lh-copy mt3">
+          <a href="#0" class="f6 link dim black db">Sign up</a>
+          <a href="#0" class="f6 link dim black db">Forgot your password?</a>
+        </div>
+        <small class="red"><%= error %></small>
+      </form>
+    </main>
+
+
+<!-- 
     <h5>Don't have an account? Sign up!</h5>
 
     <div style="padding: 50px">
@@ -43,7 +58,7 @@
             <br>
             <button type="submit" class="btn btn-primary" name="new-job">Sign me up!</button>
         </form>
-    </div>
+    </div> -->
 
   </body>
 </html>
