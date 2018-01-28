@@ -50,7 +50,7 @@ jobObject.genome = genome;
 jobObject.gene = gene;
 jobObject.matchingRate = matchingRate;
 app.jobObject = jobObject;
-
+app.use(express.static(__dirname + '/public'));
 
 app.use('/postnewjob', routes.postJob);
 app.use('/about', routes.getAbout);

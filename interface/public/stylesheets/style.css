@@ -122,9 +122,17 @@ body {
   font-size: 14px;
   line-height: 1.42857143;
   color: #333;
-
 }
 
 a {
   color: #00B7FF;
+}
+
+.input-file {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
 }
