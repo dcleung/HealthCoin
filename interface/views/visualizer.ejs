@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css"> -->
     <link rel="stylesheet" href="https://unpkg.com/tachyons@4.9.1/css/tachyons.min.css"/>
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script src="javascript/search_genome.js"
   </head>
   <body>
     <nav class="navbar navbar-default">
@@ -40,7 +41,14 @@
     <button type="button" id="miningbutton" class="btn btn-primary btn-lg">Mining...</button>
     <script type="text/javascript">
         $('#miningbutton').click(function() {
-            // TODO, insert mining code here
+            $.getJSON('/getDNA', function(data)
+                // We run the mining function on the data
+                var answer = findGenome(genome, targetDNA, matchThreshold);
+                // Once the answer is found, we post the answer
+                $.post('/postanswer', answer, function(response) {
+                    // Do something
+                });
+            });
         });
     </script>
 

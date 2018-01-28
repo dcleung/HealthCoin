@@ -1,38 +1,43 @@
 var express = require('express');
+var session = require('client-sessions');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+
 var routes = require('./routes/routes');
 
 var app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
 app.use(express.bodyParser());
 app.use(express.logger("default"));
 app.use(express.cookieParser());
-app.use(express.session({secret: 'secretThing', username: "derex.leung@gmail.com"}));
+app.use(express.session({
+    secret : 'secret-token',
+    username : null,
+    balance : null
+}));
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// make sure that js files aren't cached by the browser
+app.use(function(req, res, next) {
+    res.setHeader("Cache-Control", "no-cache must-revalidate");
+    next();
+});
 
 app.use('/postnewjob', routes.postJob);
 app.use('/about', routes.getAbout);
 app.use('/visualizer', routes.getVisualizer);
 app.use('/mine', routes.getMine);
+app.use('/postnewaccount', routes.postAccount);
+app.use('/checkaccount', routes.postCheck);
+app.use('/signup', routes.getSignup);
+//app.use('/getDNA');
 
 // DEFAULT
 app.use('/', routes.getHome);
+// app.post('/postanswer', routes.postAnswer);
 
 
 
