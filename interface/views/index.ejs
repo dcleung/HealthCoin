@@ -29,12 +29,9 @@
       </nav>
     </header>
 
-    <h3>HealthCoin - Mining for <i>Your</i> Health</h3>
 
-        <p>Welcome back, <%= name %>!</p>
-        <p>Your wallet key is <%= userID %>.</p>
         <!-- Adding a new job -->
-    <div class="pa3 flex items-center bb bt">
+    <div class="center pv3 ph3-l ph2 flex items-center bb bt">
 
         <form method="POST" action="uploadFile" enctype="multipart/form-data" class="">
 
@@ -74,7 +71,7 @@
 
     <div class="pa3 tl">
         <h2>Submitted Sequences:</h2>
-        <table class="collapse ba tl br2 b--black-10 pv2 ph3 mt4">
+        <table class="w-100 collapse ba tl br2 b--black-10 pv2 ph3 mt4">
           <tbody>
             <tr class="striped--near-white">
               <th scope="col" class="pv2 ph3 ttu tl f6 fw6 tt">Sequence Name</th>
@@ -115,7 +112,7 @@
 
       <br>
       <h4>All pending transactions:</h4>
-       <table class="collapse ba tl br2 b--black-10 pv2 ph3 mt4">
+       <table class="w-100 collapse ba tl br2 b--black-10 pv2 ph3 mt4">
           <tbody>
             <tr class="striped--near-white">
               <th scope="col" class="pv2 ph3 ttu tl f6 fw6 tt">Block</th>
@@ -138,6 +135,29 @@
             <% } %>
           </tbody>
           </table>
+    </div>
+
+
+
+
+    <div class="center ph3-l ph2">
+      <footer class="pv4 cf">
+        <div class="w-100 mb4 bb pb5-l pb4 cf">
+          <!-- <h4 class="mt3-l mt0 mb0 f1-l f2-m f3 fl">Get in touch</h3>
+          <span class="f-subheadline-l fr">👋</span> -->
+        </div>
+
+        <h3>HealthCoin - Mining for <i>Your</i> Health</h3>
+        <p class="gray">Welcome back, <%= name %>!</p>
+        <p class="gray">Your wallet key is <%= userID %>.</p>
+
+        <p class="gray">© hlth.chain, no rights reserved.</p>
+
+        <div class="w-100 mb4 pb5-l bb b--black-10 pb4 cf">
+          <h4 class="mt3-l mt0 mb0 f2-l f3-m f4 fl">Get in touch</h3>
+          <span class="f-subheadline-l f2-l f3-m f4 fr">👋</span>
+        </div>
+      </footer>
     </div>
 
     <script>
