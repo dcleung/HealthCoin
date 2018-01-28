@@ -190,12 +190,12 @@ var postJob = function(req, res) {
     var testEntries = [];
     var inx = 0;
 
+    // Simple looping to verify solutions
     for (j = 0; j < arr.length - 1; j++) {
         if (arr[j] === test[j] && arr[j + 1] === test[j + 1]) {
             inx = j;
         }
     }
-
     for (i = 0; i < arr.length; i++) {
         if (arr[i] != test[i]) {
             testEntries.push(i);
@@ -357,38 +357,40 @@ var getMining = function(req, res) {
                 }
             }
 
-            Job.scan().loadAll().exec(function(err, resp2) {
-                if (resp2) {
-                    items2 = resp2.Items;
-                    var size = Object.keys(items2).length;
-                    for (var j = 0; j < size; j++) {
-                        if (items2[j].attrs.status === "Incomplete") {
-                            var jobID = items2[j].attrs.JobID;
-                            var res = items2[j].attrs.ans;
-                            Job.update({JobID : jobID, status : "Complete. Indices: " + res}, function(err, acc) {
-                                if (!err) {
-                                    console.log('incremented age by 1', acc.get('status'));
-                                } else {
-                                    console.log("ERRORRRR");
-                                }
-                            });
+        }
+    });
+
+    Job.scan().loadAll().exec(function(err, resp2) {
+        if (resp2) {
+            items2 = resp2.Items;
+            var size = Object.keys(items2).length;
+            for (var j = 0; j < size; j++) {
+                if (items2[j].attrs.status === "Incomplete") {
+                    var jobID = items2[j].attrs.JobID;
+                    var res = items2[j].attrs.ans;
+                    Job.update({JobID : jobID, status : "Complete. Indices: " + res}, function(err, acc) {
+                        if (!err) {
+                            console.log('incremented age by 1', acc.get('status'));
+                        } else {
+                            console.log("ERRORRRR");
                         }
-                    }
-                } else {
-                    console.log("HELP IM HERE");
+                    });
                 }
-            });
+            }
+        } else {
+            console.log("HELP IM HERE");
         }
     });
 
     Block.create({
-                    hash : 0,
-                    previousHash : null,
-                    start : 0,
-                    matches : [],
-                    data : {},
-                    transactions : numTransactions
-                });
+        hash : blockNum,
+        previousHash : blockNum - 1,
+        start : 0,
+        matches : [],
+        transactions : numTransactions
+    }, function(err, post) {
+        console.log(post);
+    });
     blockNum++;
     res.redirect('/');
 }
