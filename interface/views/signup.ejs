@@ -9,13 +9,24 @@
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
   </head>
   <body>
-    <h3>HealthCoin - Mining for <i>Your</i> Health</h3>
+
+    <header class="cf ph3 tc center">
+      <h1 class="fl-ns w-100 mb0 tc mt3 pt1"><a href="" class="link red">h<span class="dib-l dib-m dn">lth</span>.chain</a></h1>
+
+      <p class="gray">HealthCoin - Mining for <i>Your</i> Health</p>
+      <!-- <nav class="fr-ns">
+        <a href="/about" class="b link dark-gray hover-red bb bw1" style="padding-bottom: .95rem;"> <i data-feather="eye"></i></a>
+        <a href="/visualizer" class="b link dark-gray hover-red ml3 mr4"><i data-feather="help-circle"></i></a>
+
+      </nav> -->
+    </header>
+
 
 
     <main class="pa4 black-80">
       <form class="measure center" action="/checkaccount" method="post">
         <fieldset id="sign_up" class="ba b--transparent ph0 mh0">
-          <legend class="f4 fw6 ph0 mh0">Sign In</legend>
+          <legend class="f3 fw6 ph0 mh0">Sign In</legend>
           <div class="mt3">
             <label class="db fw6 lh-copy f6" for="email-address">Username</label>
             <input class="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="text" name="loginUsername" id="loginUsername">
@@ -27,7 +38,8 @@
           <label class="pa0 ma0 lh-copy f6 pointer"><input type="checkbox"> Remember me</label>
         </fieldset>
         <div class="">
-          <button class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Sign in">Sign In </button>
+          <button class="tc b ph4 pv3 input-reset ba pa4 bg-red b--red grow pointer f6 bg-animate hover-bg-dark-red white hover-white" type="submit" value="Sign in">Sign In</button>
+           <!-- <i data-feather="log-in" width="16px"></i> -->
         </div>
         <div class="lh-copy mt3">
           <a href="#0" class="f6 link dim black db">Sign up</a>
@@ -38,27 +50,10 @@
     </main>
 
 
-<!-- 
-    <h5>Don't have an account? Sign up!</h5>
 
-    <div style="padding: 50px">
-        <form action="/postnewaccount" method="post">
-            <p>Username:</p>
-            <input class="input-field form-control" type="text" name="inputUsername">
-            <br>
-            <p>Email:</p>
-            <input class="input-field form-control" type="text" name="inputEmail">
-            <br>
-            <p>Name:</p>
-            <input class="input-field form-control" type="text" name="inputName">
-            <p>Password:</p>
-            <input class="input-field form-control" type="password" name="inputPassword">
-            <br>
-
-            <br>
-            <button type="submit" class="btn btn-primary" name="new-job">Sign me up!</button>
-        </form>
-    </div> -->
+    <script>
+      feather.replace()
+    </script>
 
   </body>
 </html>
