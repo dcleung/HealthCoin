@@ -49,7 +49,7 @@
                 <!-- <p>Name your sequence:</p>
                 <input class="" type="text" name="inputName" placeholder="Bob's job"> -->
 
-                <label for="inputName" class="f6 b db mb2">Name your sequence:</label>
+                <label for="inputName" class="f7 b ttu gray db mb2 mt1">Name your sequence:</label>
                 <input name="inputName" id="inputName" placeholder="Bob's job" class="input-reset ba b--black-20 pa3 db" type="text" aria-describedby="inputName-desc" style="margin-bottom: 1.80rem;">
                 <!-- <small id="inputName-desc" class="f6 black-60 db mb2">Helper text for the form control.</small> -->
 
@@ -76,8 +76,8 @@
     </div>
 
     <div class="pa3 tl">
-        <h2>Submitted Sequences:</h2>
-        <table class="w-100 collapse ba tl br2 b--black-10 pv2 ph3 mt4">
+        <h2 class="mb0">Submitted Sequences:</h2>
+        <table class="w-100 collapse ba tl br2 b--black-10 pv2 ph3 mt2 mb5">
           <tbody>
             <tr class="striped--near-white">
               <th scope="col" class="pv2 ph3 ttu tl f7 fw6 tt">Sequence Name</th>
@@ -110,9 +110,9 @@
 
 
 
-      <h2>All pending transactions:</h2>
+      <h2 class="mb0">All pending transactions:</h2>
 
-       <table class="w-100 collapse ba tl br2 b--black-10 pv2 ph3 mt4">
+       <table class="w-100 collapse ba tl br2 b--black-10 pv2 ph3 mt2 mb4">
           <tbody>
             <tr class="striped--near-white">
               <th scope="col" class="pv2 ph3 ttu tl f7 fw6 tt">Block</th>
@@ -137,13 +137,10 @@
           </table>
           <br>
 
-          <form class="" action="/getMining" method="post">
-          <div class="">
-          <button type="submit" class="tc b ph4 pv3 input-reset ba pa4 b--black bg-transparent grow pointer f6 bg-animate hover-bg-black hover-white" name="new-job">Mine next block!</button>
-          </form>
 
-          <h2>Current Blockchain:</h2>
-          <table class="w-100 collapse ba tl br2 b--black-10 pv2 ph3 mt4">
+
+          <h2 class="mb0">Current Blockchain:</h2>
+          <table class="w-100 collapse ba tl br2 b--black-10 pv2 ph3 mt2 mb3">
           <tbody>
             <tr class="striped--near-white">
               <th scope="col" class="pv2 ph3 ttu tl f6 fw6 tt">Block ID</th>
@@ -169,6 +166,9 @@
             <% } %>
           </tbody>
           </table>
+          <form class="" action="/getMining" method="post">
+          <button type="submit" class="tc b ph4 pv3 input-reset ba pa4 b--black bg-transparent grow pointer f6 bg-animate hover-bg-black hover-white" name="new-job">Mine next block!</button>
+          </form>
     </div>
 
 
@@ -179,11 +179,11 @@
 
       </div>
       <p class="lh-copy measure center f6 black-70 mt3">
-      </p><form class="AVAST_PAM_nonloginform" action="/posttransaction" method="post">
+      </p><form action="/posttransaction" method="post">
 
         <div class="mb4">
-          <label class="f7 b ttu gray db mb2 mt1">Recipient's Wallet Key:</label>
-          <input class="tc f6 input-reset w-100 ba b--black-20 pa3 db" type="text" name="inputWallet" placeholder="person's key">
+          <label class="f7 b ttu gray db mb2 mt1">Person's username:</label>
+          <input class="tc f6 input-reset w-100 ba b--black-20 pa3 db" type="text" name="inputWallet" placeholder="Jane Doe">
         </div>
 
         <div class="mb4">
@@ -193,6 +193,7 @@
 
         <button type="submit" class="tc b ph4 pv3 input-reset ba pa4 b--black bg-transparent grow pointer f6 bg-animate hover-bg-black hover-white" name="new-job">Make transaction</button>
       </form>
+
 
     </article>
 
