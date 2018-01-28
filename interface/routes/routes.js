@@ -84,7 +84,10 @@ var getAbout = function(req, res) {
 /* GET DNA problem */
 var getDNA = function(req, res) {
     // Put the database call here
-    res.send( );
+    var dnaObj = new Object();
+    dnaObj.genome = "blahblahblahtacoblah";
+    dnaObj.targetGene = "blah"
+    res.send(JSON.stringify(dnaObj));
 }
 
 /* POST job page. */

@@ -30,6 +30,7 @@ app.use('/postnewjob', routes.postJob);
 app.use('/about', routes.getAbout);
 app.use('/visualizer', routes.getVisualizer);
 app.use('/mine', routes.getMine);
+app.use('/getDNA');
 
 // DEFAULT
 app.use('/', routes.getHome);
