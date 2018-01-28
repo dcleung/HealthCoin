@@ -10,7 +10,6 @@
   </head>
   <body>
     <h3>HealthCoin - Mining for <i>Your</i> Health</h3>
-
     <h4>Log in</h4>
     <form action="/checkaccount" method="post">
             <p>Username:</p>
@@ -22,6 +21,8 @@
             <br>
             <button type="submit" class="btn btn-primary" name="new-job">Log in</button>
         </form>
+
+        <p><%= error %></p>
 
     <h5>Don't have an account? Sign up!</h5>
             
@@ -38,7 +39,6 @@
             <p>Password:</p>
             <input class="input-field form-control" type="password" name="inputPassword">
             <br>
-            <p><%= error %></p>
 
             <br>
             <button type="submit" class="btn btn-primary" name="new-job">Sign me up!</button>

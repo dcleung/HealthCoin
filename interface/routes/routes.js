@@ -51,7 +51,7 @@ vogels.createTables({
 var getHome = function(req, res) {
     console.log(req.session)
     if (!req.session.username) {
-        res.render('signup.ejs', {error : null});
+        res.render('signup.ejs', {error : null, userID : req.session.userID });
     }
     Job.scan().where('user').equals(req.session.username).loadAll().exec(function(err, resp) {
         var itemValues = [];
@@ -67,7 +67,7 @@ var getHome = function(req, res) {
         }
         console.log(itemValues);
         res.render('index.ejs', {
-            name: req.session.username , balance: req.session.balance , error: null, items : itemValues
+            name: req.session.username , balance: req.session.balance , error: null, items : itemValues, userID : req.session.userID
         });
     });
 }
@@ -102,6 +102,12 @@ var postJob = function(req, res) {
     var name = req.body.inputName;
     var genome = req.body.inputGenome;
 
+
+    if (!cost || !name || !genome) {
+        req.session.message = "missing inputs";
+        res.redirect('/');
+    }
+
     Job.create({
                 cost : cost,
                 name : name,
@@ -135,8 +141,14 @@ var postAccount = function(req, res) {
                 value : 0
             }, function(err, post) {
                 if (err) {
+                    req.session.message = err;
                     res.redirect('/')
                 } else {
+
+
+
+
+
                     res.redirect('/');
                 }
     });
@@ -158,7 +170,7 @@ var postCheck = function(req, res) {
                 if (acc.get('password').localeCompare(password) == 0) {
                     req.session.email = acc.get('email');
                     req.session.username = username;
-                    req.session.key = acc.get('userID');
+                    req.session.userID = acc.get('userID');
                     req.session.balance = acc.get('value');
                     res.redirect('/');
                 } else {
