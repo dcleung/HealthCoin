@@ -217,6 +217,10 @@ var postanswer = function(req, res) {
     // Do something with the answer and thus block
 }
 
+var getDNA = function(req, res) {
+    res.send(JSON.stringify(req.app.jobObject));
+}
+
 var routes = {
     getHome : getHome,
     postJob : postJob,

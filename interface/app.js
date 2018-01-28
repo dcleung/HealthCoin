@@ -5,6 +5,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+app.require('async');
 
 
 var routes = require('./routes/routes');
@@ -26,6 +27,29 @@ app.use(function(req, res, next) {
     next();
 });
 
+var lineReader = require('readline').createInterface({
+  input: require('fs').createReadStream('../dna.txt')
+});
+
+lineReader.on('line', function (line) {
+  console.log('Line from file:', line);
+});
+
+var fs = require("fs");
+var text = fs.readFileSync("../dna.txt")..toString('utf-8');
+var genome = text.split("\n")
+
+var fs = require("fs");
+var text = fs.readFileSync("../gene.txt")..toString('utf-8');
+var gene = text.split("\n")
+
+var matchingRate = 0.80;
+
+var jobObject = new Object();
+jobObject.genome = genome;
+jobObject.gene = gene;
+jobObject.matchingRate = matchingRate;
+app.jobObject = jobObject;
 app.use(express.static(__dirname + '/public'));
 
 app.use('/postnewjob', routes.postJob);
@@ -35,7 +59,7 @@ app.use('/mine', routes.getMine);
 app.use('/postnewaccount', routes.postAccount);
 app.use('/checkaccount', routes.postCheck);
 app.use('/signup', routes.getSignup);
-//app.use('/getDNA');
+app.use('/getDNA', routes.getDNA);
 
 // DEFAULT
 app.use('/', routes.getHome);
