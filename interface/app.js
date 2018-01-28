@@ -33,7 +33,7 @@ app.use('/mine', routes.getMine);
 app.use('/postnewaccount', routes.postAccount);
 app.use('/checkaccount', routes.postCheck);
 app.use('/signup', routes.getSignup);
-
+app.use('/getDNA');
 
 // DEFAULT
 app.use('/', routes.getHome);

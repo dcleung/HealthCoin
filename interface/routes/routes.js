@@ -87,6 +87,15 @@ var getAbout = function(req, res) {
     res.render('about.ejs', { name: 'Bob' , balance: '0', error: null});
 }
 
+/* GET DNA problem */
+var getDNA = function(req, res) {
+    // Put the database call here
+    var dnaObj = new Object();
+    dnaObj.genome = "blahblahblahtacoblah";
+    dnaObj.targetGene = "blah"
+    res.send(JSON.stringify(dnaObj));
+}
+
 /* POST job page. */
 var postJob = function(req, res) {
     var cost = req.body.inputCost;
@@ -177,7 +186,8 @@ var routes = {
     getMine : getMine,
     postAccount : postAccount,
     getSignup : getSignup,
-    postCheck : postCheck
+    postCheck : postCheck,
+    getDNA : getDNA
 };
 
 module.exports = routes;

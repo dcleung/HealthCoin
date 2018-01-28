@@ -1,198 +1,344 @@
-const {TransactionError} = require('../errors')
-const CryptoJS = require('crypto-js')
-const crypto = require('crypto')
-const Joi = require('joi')
-const walletLib = require('./wallet')
-const {miningReward} = require('../config')
+import * as CryptoJS from 'crypto-js';
+import * as ecdsa from 'elliptic';
+import * as _ from 'lodash';
 
-const transactionSchema = Joi.object().keys({
-  id: Joi.string().hex().length(64),
-  time: Joi.number(),
-  hash: Joi.string().hex().length(64),
-  reward: Joi.boolean(),
-  inputs: Joi.array().items(Joi.object().keys({
-    tx: Joi.string().hex().length(64),
-    index: Joi.number(),
-    amount: Joi.number(),
-    address: Joi.string(),
-    signature: Joi.string().base64(),
-  })),
-  outputs: Joi.array().items(Joi.object().keys({
-    index: Joi.number(),
-    amount: Joi.number(),
-    address: Joi.string(),
-  })),
-})
+const ec = new ecdsa.ec('secp256k1');
 
-/**
- * Validate transaction data
- *
- * @param transaction
- * @return {*}
- */
-function isDataValid (transaction) {
-  return Joi.validate(transaction, transactionSchema).error === null
+const COINBASE_AMOUNT: number = 50;
+
+class UnspentTxOut {
+    public readonly txOutId: string;
+    public readonly txOutIndex: number;
+    public readonly address: string;
+    public readonly amount: number;
+
+    constructor(txOutId: string, txOutIndex: number, address: string, amount: number) {
+        this.txOutId = txOutId;
+        this.txOutIndex = txOutIndex;
+        this.address = address;
+        this.amount = amount;
+    }
 }
 
-/**
- * Verify block transactions list
- *
- * @param transactions
- * @param unspent
- */
-function checkTransactions (transactions, unspent) {
-  transactions.forEach(tx => checkTransaction(tx, unspent))
-  if (transactions.filter(tx => tx.reward).length !== 1) throw new TransactionError('Transactions must have exactly one reward transaction')
+class TxIn {
+    public txOutId: string;
+    public txOutIndex: number;
+    public signature: string;
 }
 
-/**
- * Verify single transaction
- *
- * @param transaction
- * @param unspent
- */
-function checkTransaction (transaction, unspent) {
-  if (! isDataValid(transaction)) throw new TransactionError('Transaction data is not valid')
-  if (transaction.hash !== calculateHash(transaction)) throw new TransactionError('Invalid transaction hash')
+class TxOut {
+    public address: string;
+    public amount: number;
 
-  // Verify each input signature
-  transaction.inputs.forEach(function (input) {
-    if (! verifyInputSignature(input)) throw new TransactionError('Invalid input signature')
-  })
-
-  // Check if inputs are in unspent list
-  transaction.inputs.forEach(function (input) {
-    if (! unspent.find(out => out.tx === input.tx && out.index === input.index)) { throw new TransactionError('Input has been already spent: ' + input.tx) }
-  })
-
-  if (transaction.reward) {
-    // For reward transaction: check if reward output is correct
-    if (transaction.outputs.length !== 1) throw new TransactionError('Reward transaction must have exactly one output')
-    if (transaction.outputs[0].amount !== miningReward) throw new TransactionError(`Mining reward must be exactly: ${miningReward}`)
-  } else {
-    // For normal transaction: check if total output amount equals input amount
-    if (transaction.inputs.reduce((acc, input) => acc + input.amount, 0) !==
-      transaction.outputs.reduce((acc, output) => acc + output.amount, 0)) { throw new TransactionError('Input and output amounts do not match') }
-  }
-
-  return true
+    constructor(address: string, amount: number) {
+        this.address = address;
+        this.amount = amount;
+    }
 }
 
-/**
- * Verify input signature
- *
- * @param input
- * @return {*}
- */
-function verifyInputSignature (input) {
-  return walletLib.verifySignature(input.address, input.signature, calculateInputHash(input))
+class Transaction {
+
+    public id: string;
+
+    public txIns: TxIn[];
+    public txOuts: TxOut[];
 }
 
-/**
- * Calculate transaction hash
- *
- * @param transaction
- */
-function calculateHash ({id, type, inputs, outputs}) {
-  return CryptoJS.SHA256(JSON.stringify({id, type, inputs, outputs})).toString()
-}
+const getTransactionId = (transaction: Transaction): string => {
+    const txInContent: string = transaction.txIns
+        .map((txIn: TxIn) => txIn.txOutId + txIn.txOutIndex)
+        .reduce((a, b) => a + b, '');
 
-/**
- * Calculate input hash
- *
- * @param input
- */
-function calculateInputHash ({tx, index, amount, address}) {
-  return CryptoJS.SHA256(JSON.stringify({tx, index, amount, address})).toString()
-}
+    const txOutContent: string = transaction.txOuts
+        .map((txOut: TxOut) => txOut.address + txOut.amount)
+        .reduce((a, b) => a + b, '');
 
-/**
- * Create transaction
- *
- * @param inputs
- * @param outputs
- * @param reward
- * @return {{id: string, reward: boolean, inputs: *, outputs: *, hash: string}}
- */
-function createTransaction (inputs, outputs, reward = false) {
-  const tx = {
-    id: crypto.randomBytes(32).toString('hex'),
-    time: Math.floor(new Date().getTime() / 1000),
-    reward,
-    inputs,
-    outputs,
-  }
-  tx.hash = calculateHash(tx)
+    return CryptoJS.SHA256(txInContent + txOutContent).toString();
+};
 
-  return tx
-}
+const validateTransaction = (transaction: Transaction, aUnspentTxOuts: UnspentTxOut[]): boolean => {
 
-/**
- * Create reward transaction for block mining
- *
- * @param address
- * @return {{id: string, reward: boolean, inputs: *, outputs: *, hash: string}}
- */
-function createRewardTransaction (address) {
-  return createTransaction([], [{index: 0, amount: miningReward, address}], true)
-}
+    if (!isValidTransactionStructure(transaction)) {
+        return false;
+    }
 
-/**
- * Create and sign input
- *
- * @param tx Based on transaction id
- * @param index Based on transaction output index
- * @param amount
- * @param wallet
- * @return {{tx: *, index: *, amount: *, address: *}}
- */
-function createInput (tx, index, amount, wallet) {
-  const input = {
-    tx,
-    index,
-    amount,
-    address: wallet.public,
-  }
-  input.signature = walletLib.signHash(wallet.private, calculateInputHash(input))
+    if (getTransactionId(transaction) !== transaction.id) {
+        console.log('invalid tx id: ' + transaction.id);
+        return false;
+    }
+    const hasValidTxIns: boolean = transaction.txIns
+        .map((txIn) => validateTxIn(txIn, transaction, aUnspentTxOuts))
+        .reduce((a, b) => a && b, true);
 
-  return input
-}
+    if (!hasValidTxIns) {
+        console.log('some of the txIns are invalid in tx: ' + transaction.id);
+        return false;
+    }
 
-/**
- * Build a transaction to send money
- *
- * @param wallet
- * @param toAddress
- * @param amount
- * @param unspent
- * @return {{id: string, reward: boolean, inputs: *, outputs: *, hash: string}}
- */
-function buildTransaction (wallet, toAddress, amount, unspent) {
-  let inputsAmount = 0
-  const inputsRaw = unspent.filter(i => {
-    const more = inputsAmount < amount
-    if (more) inputsAmount += i.amount
-    return more
-  })
-  if (inputsAmount < amount) throw new TransactionError('Not enough funds')
+    const totalTxInValues: number = transaction.txIns
+        .map((txIn) => getTxInAmount(txIn, aUnspentTxOuts))
+        .reduce((a, b) => (a + b), 0);
 
-  const inputs = inputsRaw.map(i => createInput(i.tx, i.index, i.amount, wallet))
+    const totalTxOutValues: number = transaction.txOuts
+        .map((txOut) => txOut.amount)
+        .reduce((a, b) => (a + b), 0);
 
-  // Send amount to destination address
-  const outputs = [{index: 0, amount, address: toAddress}]
-  // Send back change to my wallet
-  if (inputsAmount - amount > 0) {
-    outputs.push({index: 1, amount: inputsAmount - amount, address: wallet.public})
-  }
+    if (totalTxOutValues !== totalTxInValues) {
+        console.log('totalTxOutValues !== totalTxInValues in tx: ' + transaction.id);
+        return false;
+    }
 
-  return createTransaction(inputs, outputs)
-}
+    return true;
+};
 
-module.exports = {
-  isDataValid,
-  checkTransactions,
-  checkTransaction,
-  calculateHash,
-  createRewardTransaction,
-  buildTransaction,
-}
+const validateBlockTransactions = (aTransactions: Transaction[], aUnspentTxOuts: UnspentTxOut[], blockIndex: number): boolean => {
+    const coinbaseTx = aTransactions[0];
+    if (!validateCoinbaseTx(coinbaseTx, blockIndex)) {
+        console.log('invalid coinbase transaction: ' + JSON.stringify(coinbaseTx));
+        return false;
+    }
+
+    // check for duplicate txIns. Each txIn can be included only once
+    const txIns: TxIn[] = _(aTransactions)
+        .map((tx) => tx.txIns)
+        .flatten()
+        .value();
+
+    if (hasDuplicates(txIns)) {
+        return false;
+    }
+
+    // all but coinbase transactions
+    const normalTransactions: Transaction[] = aTransactions.slice(1);
+    return normalTransactions.map((tx) => validateTransaction(tx, aUnspentTxOuts))
+        .reduce((a, b) => (a && b), true);
+
+};
+
+const hasDuplicates = (txIns: TxIn[]): boolean => {
+    const groups = _.countBy(txIns, (txIn: TxIn) => txIn.txOutId + txIn.txOutIndex);
+    return _(groups)
+        .map((value, key) => {
+            if (value > 1) {
+                console.log('duplicate txIn: ' + key);
+                return true;
+            } else {
+                return false;
+            }
+        })
+        .includes(true);
+};
+
+const validateCoinbaseTx = (transaction: Transaction, blockIndex: number): boolean => {
+    if (transaction == null) {
+        console.log('the first transaction in the block must be coinbase transaction');
+        return false;
+    }
+    if (getTransactionId(transaction) !== transaction.id) {
+        console.log('invalid coinbase tx id: ' + transaction.id);
+        return false;
+    }
+    if (transaction.txIns.length !== 1) {
+        console.log('one txIn must be specified in the coinbase transaction');
+        return;
+    }
+    if (transaction.txIns[0].txOutIndex !== blockIndex) {
+        console.log('the txIn signature in coinbase tx must be the block height');
+        return false;
+    }
+    if (transaction.txOuts.length !== 1) {
+        console.log('invalid number of txOuts in coinbase transaction');
+        return false;
+    }
+    if (transaction.txOuts[0].amount !== COINBASE_AMOUNT) {
+        console.log('invalid coinbase amount in coinbase transaction');
+        return false;
+    }
+    return true;
+};
+
+const validateTxIn = (txIn: TxIn, transaction: Transaction, aUnspentTxOuts: UnspentTxOut[]): boolean => {
+    const referencedUTxOut: UnspentTxOut =
+        aUnspentTxOuts.find((uTxO) => uTxO.txOutId === txIn.txOutId && uTxO.txOutIndex === txIn.txOutIndex);
+    if (referencedUTxOut == null) {
+        console.log('referenced txOut not found: ' + JSON.stringify(txIn));
+        return false;
+    }
+    const address = referencedUTxOut.address;
+
+    const key = ec.keyFromPublic(address, 'hex');
+    const validSignature: boolean = key.verify(transaction.id, txIn.signature);
+    if (!validSignature) {
+        console.log('invalid txIn signature: %s txId: %s address: %s', txIn.signature, transaction.id, referencedUTxOut.address);
+        return false;
+    }
+    return true;
+};
+
+const getTxInAmount = (txIn: TxIn, aUnspentTxOuts: UnspentTxOut[]): number => {
+    return findUnspentTxOut(txIn.txOutId, txIn.txOutIndex, aUnspentTxOuts).amount;
+};
+
+const findUnspentTxOut = (transactionId: string, index: number, aUnspentTxOuts: UnspentTxOut[]): UnspentTxOut => {
+    return aUnspentTxOuts.find((uTxO) => uTxO.txOutId === transactionId && uTxO.txOutIndex === index);
+};
+
+const getCoinbaseTransaction = (address: string, blockIndex: number): Transaction => {
+    const t = new Transaction();
+    const txIn: TxIn = new TxIn();
+    txIn.signature = '';
+    txIn.txOutId = '';
+    txIn.txOutIndex = blockIndex;
+
+    t.txIns = [txIn];
+    t.txOuts = [new TxOut(address, COINBASE_AMOUNT)];
+    t.id = getTransactionId(t);
+    return t;
+};
+
+const signTxIn = (transaction: Transaction, txInIndex: number,
+                  privateKey: string, aUnspentTxOuts: UnspentTxOut[]): string => {
+    const txIn: TxIn = transaction.txIns[txInIndex];
+
+    const dataToSign = transaction.id;
+    const referencedUnspentTxOut: UnspentTxOut = findUnspentTxOut(txIn.txOutId, txIn.txOutIndex, aUnspentTxOuts);
+    if (referencedUnspentTxOut == null) {
+        console.log('could not find referenced txOut');
+        throw Error();
+    }
+    const referencedAddress = referencedUnspentTxOut.address;
+
+    if (getPublicKey(privateKey) !== referencedAddress) {
+        console.log('trying to sign an input with private' +
+            ' key that does not match the address that is referenced in txIn');
+        throw Error();
+    }
+    const key = ec.keyFromPrivate(privateKey, 'hex');
+    const signature: string = toHexString(key.sign(dataToSign).toDER());
+
+    return signature;
+};
+
+const updateUnspentTxOuts = (aTransactions: Transaction[], aUnspentTxOuts: UnspentTxOut[]): UnspentTxOut[] => {
+    const newUnspentTxOuts: UnspentTxOut[] = aTransactions
+        .map((t) => {
+            return t.txOuts.map((txOut, index) => new UnspentTxOut(t.id, index, txOut.address, txOut.amount));
+        })
+        .reduce((a, b) => a.concat(b), []);
+
+    const consumedTxOuts: UnspentTxOut[] = aTransactions
+        .map((t) => t.txIns)
+        .reduce((a, b) => a.concat(b), [])
+        .map((txIn) => new UnspentTxOut(txIn.txOutId, txIn.txOutIndex, '', 0));
+
+    const resultingUnspentTxOuts = aUnspentTxOuts
+        .filter(((uTxO) => !findUnspentTxOut(uTxO.txOutId, uTxO.txOutIndex, consumedTxOuts)))
+        .concat(newUnspentTxOuts);
+
+    return resultingUnspentTxOuts;
+};
+
+const processTransactions = (aTransactions: Transaction[], aUnspentTxOuts: UnspentTxOut[], blockIndex: number) => {
+
+    if (!validateBlockTransactions(aTransactions, aUnspentTxOuts, blockIndex)) {
+        console.log('invalid block transactions');
+        return null;
+    }
+    return updateUnspentTxOuts(aTransactions, aUnspentTxOuts);
+};
+
+const toHexString = (byteArray): string => {
+    return Array.from(byteArray, (byte: any) => {
+        return ('0' + (byte & 0xFF).toString(16)).slice(-2);
+    }).join('');
+};
+
+const getPublicKey = (aPrivateKey: string): string => {
+    return ec.keyFromPrivate(aPrivateKey, 'hex').getPublic().encode('hex');
+};
+
+const isValidTxInStructure = (txIn: TxIn): boolean => {
+    if (txIn == null) {
+        console.log('txIn is null');
+        return false;
+    } else if (typeof txIn.signature !== 'string') {
+        console.log('invalid signature type in txIn');
+        return false;
+    } else if (typeof txIn.txOutId !== 'string') {
+        console.log('invalid txOutId type in txIn');
+        return false;
+    } else if (typeof  txIn.txOutIndex !== 'number') {
+        console.log('invalid txOutIndex type in txIn');
+        return false;
+    } else {
+        return true;
+    }
+};
+
+const isValidTxOutStructure = (txOut: TxOut): boolean => {
+    if (txOut == null) {
+        console.log('txOut is null');
+        return false;
+    } else if (typeof txOut.address !== 'string') {
+        console.log('invalid address type in txOut');
+        return false;
+    } else if (!isValidAddress(txOut.address)) {
+        console.log('invalid TxOut address');
+        return false;
+    } else if (typeof txOut.amount !== 'number') {
+        console.log('invalid amount type in txOut');
+        return false;
+    } else {
+        return true;
+    }
+};
+
+const isValidTransactionStructure = (transaction: Transaction) => {
+    if (typeof transaction.id !== 'string') {
+        console.log('transactionId missing');
+        return false;
+    }
+    if (!(transaction.txIns instanceof Array)) {
+        console.log('invalid txIns type in transaction');
+        return false;
+    }
+    if (!transaction.txIns
+            .map(isValidTxInStructure)
+            .reduce((a, b) => (a && b), true)) {
+        return false;
+    }
+
+    if (!(transaction.txOuts instanceof Array)) {
+        console.log('invalid txIns type in transaction');
+        return false;
+    }
+
+    if (!transaction.txOuts
+            .map(isValidTxOutStructure)
+            .reduce((a, b) => (a && b), true)) {
+        return false;
+    }
+    return true;
+};
+
+// valid address is a valid ecdsa public key in the 04 + X-coordinate + Y-coordinate format
+const isValidAddress = (address: string): boolean => {
+    if (address.length !== 130) {
+        console.log(address);
+        console.log('invalid public key length');
+        return false;
+    } else if (address.match('^[a-fA-F0-9]+$') === null) {
+        console.log('public key must contain only hex characters');
+        return false;
+    } else if (!address.startsWith('04')) {
+        console.log('public key must start with 04');
+        return false;
+    }
+    return true;
+};
+
+export {
+    processTransactions, signTxIn, getTransactionId, isValidAddress, validateTransaction,
+    UnspentTxOut, TxIn, TxOut, getCoinbaseTransaction, getPublicKey, hasDuplicates,
+    Transaction
+};
