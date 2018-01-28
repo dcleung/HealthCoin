@@ -146,7 +146,6 @@
               <th scope="col" class="pv2 ph3 ttu tl f6 fw6 tt">Block ID</th>
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Previous Block</th>
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Date Created</th>
-              <th scope="col" class="f6 ttu fw6 pv2 ph3">Transactions</th>
             </tr>
 
             <% for(var i=0; i < blocks.length; i++) { %>
@@ -154,7 +153,6 @@
                  <td class="pv2 ph3"><%= blocks[i].hash %></td>
                  <td class="pv2 ph3"><%= blocks[i].previousHash %></td>
                  <td class="pv2 ph3"><%= blocks[i].createdAt %></td>
-                 <td class="pv2 ph3"><%= blocks[i].transactions %></td>
                </tr>
             <% } %>
           </tbody>
