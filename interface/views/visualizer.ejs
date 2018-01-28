@@ -44,7 +44,10 @@
             $.getJSON('/getDNA', function(data)
                 // We run the mining function on the data
                 var answer = findGenome(genome, targetDNA, matchThreshold);
-                // Then do a post request here
+                // Once the answer is found, we post the answer
+                $.post('/postanswer', answer, function(response) {
+                    // Do something
+                });
             });
         });
     </script>

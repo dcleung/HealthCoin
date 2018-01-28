@@ -37,6 +37,7 @@ app.use('/signup', routes.getSignup);
 
 // DEFAULT
 app.use('/', routes.getHome);
+app.post('/postanswer', routes.postAnswer);
 
 
 

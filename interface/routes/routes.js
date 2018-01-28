@@ -190,6 +190,12 @@ var getSignup = function(req, res) {
     res.render('signup.ejs', { error: req.session.message });
 }
 
+/* receive the answer */
+var postanswer function(req, res) {
+    var answer = req.body;
+    // Do something with the answer and thus block
+}
+
 var routes = {
     getHome : getHome,
     postJob : postJob,
@@ -199,7 +205,8 @@ var routes = {
     postAccount : postAccount,
     getSignup : getSignup,
     postCheck : postCheck,
-    getDNA : getDNA
+    getDNA : getDNA,
+    postanswer : postanswer
 };
 
 module.exports = routes;
