@@ -142,6 +142,12 @@
             <% } %>
           </tbody>
           </table>
+          <br>
+
+          <form class="" action="/getMining" method="post">
+          <div class="">
+          <button type="submit" class="tc b ph4 pv3 input-reset ba pa4 b--black bg-transparent grow pointer f6 bg-animate hover-bg-black hover-white" name="new-job">Mine next block!</button>
+          </form>
 
           <h2>Current Blockchain:</h2>
           <table class="collapse ba tl br2 b--black-10 pv2 ph3 mt4">
@@ -153,12 +159,19 @@
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Transactions</th>
             </tr>
 
-            <% for(var i=0; i < transactions.length; i++) { %>
+            <tr class="striped--near-white">
+                 <td class="pv2 ph3">0</td>
+                 <td class="pv2 ph3">null</td>
+                 <td class="pv2 ph3">Genesis</td>
+                 <td class="pv2 ph3">0</td>
+               </tr>
+
+            <% for(var i=0; i < blocks.length; i++) { %>
                <tr class="striped--near-white">
-                 <td class="pv2 ph3"><%= transactions[i].block %></td>
-                 <td class="pv2 ph3"><%= transactions[i].confirmed %></td>
-                 <td class="pv2 ph3"><%= transactions[i].createdAt %></td>
-                 <td class="pv2 ph3"><%= transactions[i].sender %></td>
+                 <td class="pv2 ph3"><%= blocks[i].hash %></td>
+                 <td class="pv2 ph3"><%= blocks[i].previousHash %></td>
+                 <td class="pv2 ph3"><%= blocks[i].createdAt %></td>
+                 <td class="pv2 ph3"><%= blocks[i].transactions %></td>
                </tr>
             <% } %>
           </tbody>
@@ -174,10 +187,9 @@
           <!-- <h4 class="mt3-l mt0 mb0 f1-l f2-m f3 fl">Get in touch</h3>
           <span class="f-subheadline-l fr">👋</span> -->
         </div>
+        <p class="gray">Your wallet key is <%= userID %>.</p>
 
         <h3>HealthCoin - Mining for <i>Your</i> Health</h3>
-        <p class="gray">Welcome back, <%= name %>!</p>
-        <p class="gray">Your wallet key is <%= userID %>.</p>
 
         <p class="gray">© hlth.chain, no rights reserved.</p>
 

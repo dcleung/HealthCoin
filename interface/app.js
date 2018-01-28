@@ -60,6 +60,8 @@ app.use('/checkaccount', routes.postCheck);
 app.use('/signup', routes.getSignup);
 app.use('/getDNA', routes.getDNA);
 app.use('/posttransaction', routes.postTransaction);
+app.use('/getMining', routes.getMining);
+
 
 // DEFAULT
 app.use('/', routes.getHome);

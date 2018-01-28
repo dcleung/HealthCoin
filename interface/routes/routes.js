@@ -48,17 +48,11 @@ var Block = vogels.define('Block', {
   timestamps : true,
 
   schema : {
-    hash : Joi.string(),
-    index : Joi.number(),
-    previousHash : Joi.string(),
-    timestamp : Joi.number(),
-    data : {
-      problemID : Joi.string(),
-      start      : Joi.number(),
-      matches : vogels.types.numberSet()
-    },
-    difficulty : Joi.number(),
-    nonce : Joi.number()
+    hash : Joi.number(),
+    previousHash : Joi.number(),
+    start      : Joi.number(),
+    matches : vogels.types.numberSet(),
+    transactions : vogels.types.stringSet()
   }
 });
 
@@ -90,6 +84,17 @@ vogels.createTables({
   }
 });
 
+var blockNum = 1;
+
+Block.create({
+                hash : 0,
+                previousHash : null,
+                start : 0,
+                matches : [],
+                data : {},
+                transactions : 0
+            });
+
 /* GET home page. */
 var getHome = function(req, res) {
     console.log(req.body)
@@ -100,24 +105,36 @@ var getHome = function(req, res) {
     Job.scan().where('user').equals(req.session.username).loadAll().exec(function(err, resp) {
         var itemValues = [];
         var transValues = [];
+        var blocks = []
         if (resp) {
             Transaction.scan().loadAll().exec(function(err2, resp2) {
                 if (resp2) {                   
-                    items = resp.Items;
-                    var size = Object.keys(items).length;
-                    for (var i = 0; i < size; i++) {
-                        itemValues.push(items[i].attrs);
-                    }
+                    Block.scan().loadAll().exec(function(err3, resp3) {
+                        if (resp3) {
+                            items = resp.Items;
+                            var size = Object.keys(items).length;
+                            for (var i = 0; i < size; i++) {
+                                itemValues.push(items[i].attrs);
+                            }
 
-                    items2 = resp2.Items;
-                    var size2 = Object.keys(items2).length;
-                    for (var j = 0; j < size2; j++) {
-                        transValues.push(items2[j].attrs);
-                    }
+                            items2 = resp2.Items;
+                            var size2 = Object.keys(items2).length;
+                            for (var j = 0; j < size2; j++) {
+                                transValues.push(items2[j].attrs);
+                            }
+
+                            items3 = resp3.Items;
+                            var size3 = Object.keys(items3).length;
+                            for (var k = 0; k < size3; k++) {
+                                blocks.push(items3[k].attrs);
+                            }
+                        }
+                        res.render('index.ejs', {
+                            name: req.session.username , blocks : blocks, balance: req.session.balance , error: req.session.message, items : itemValues, userID : req.session.userID, transactions : transValues
+                        });
+                    })
                 }
-                res.render('index.ejs', {
-                    name: req.session.username , balance: req.session.balance , error: req.session.message, items : itemValues, userID : req.session.userID, transactions : transValues
-                });
+                
             });
         }
     })
@@ -294,6 +311,21 @@ var getDNA = function(req, res) {
     res.send(JSON.stringify(req.app.jobObject));
 }
 
+var getMining = function(req, res) {
+    
+
+    Block.create({
+                    hash : 0,
+                    previousHash : null,
+                    start : 0,
+                    matches : [],
+                    data : {},
+                    transactions : 0
+                });
+    blockNum++;
+    res.redirect('/');
+}
+
 var routes = {
     getHome : getHome,
     postJob : postJob,
@@ -305,7 +337,8 @@ var routes = {
     postCheck : postCheck,
     getDNA : getDNA,
     postanswer : postanswer,
-    postTransaction : postTransaction
+    postTransaction : postTransaction,
+    getMining : getMining
 };
 
 module.exports = routes;
