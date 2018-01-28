@@ -26,6 +26,8 @@ app.use(function(req, res, next) {
     next();
 });
 
+app.use(express.static(__dirname + '/public'));
+
 app.use('/postnewjob', routes.postJob);
 app.use('/about', routes.getAbout);
 app.use('/visualizer', routes.getVisualizer);
