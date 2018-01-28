@@ -51,8 +51,7 @@ var Block = vogels.define('Block', {
     hash : Joi.number(),
     previousHash : Joi.number(),
     start      : Joi.number(),
-    matches : vogels.types.numberSet(),
-    transactions : vogels.types.stringSet()
+    transactions : Joi.number()
   }
 });
 
@@ -84,16 +83,7 @@ vogels.createTables({
   }
 });
 
-var blockNum = 1;
-
-Block.create({
-                hash : 0,
-                previousHash : null,
-                start : 0,
-                matches : [],
-                data : {},
-                transactions : 0
-            });
+var blockNum = 0;
 
 /* GET home page. */
 var getHome = function(req, res) {
@@ -217,8 +207,12 @@ var postJob = function(req, res) {
                     user : req.session.username
                 }, function(err, post) {
                     if (err) {
+
                         res.render('index.ejs', { error: 'Error accessing database' , balance: '0'});
                     } else {
+                        Account.update({username : req.session.username, value : {$add : -1 * cost}}, function (err, acc) {
+                          console.log('incremented age by 1', acc.get('value'));
+                        });
                         req.session.message = null;
                         res.redirect('/');
                     };
@@ -326,7 +320,9 @@ var getDNA = function(req, res) {
 }
 
 var getMining = function(req, res) {
-    var numTransactions;
+    var numTransactions = 0;
+    var matches = [];
+    var inx = 0;
     Transaction.scan().loadAll().exec(function(err, resp) {
         if (resp) {
             items = resp.Items;
@@ -367,7 +363,12 @@ var getMining = function(req, res) {
             for (var j = 0; j < size; j++) {
                 if (items2[j].attrs.status === "Incomplete") {
                     var jobID = items2[j].attrs.JobID;
-                    var res = items2[j].attrs.ans;
+                    var res = items2[j].attrs.ans + "";
+                    inx = items2[j].attrs.inx;
+                    matches = res;
+                    Account.update({username : req.session.username, value : {$add : items2[j].attrs.cost}}, function (err, acc) {
+                          console.log('incremented age by 1', acc.get('value'));
+                    });
                     Job.update({JobID : jobID, status : "Complete. Indices: " + res}, function(err, acc) {
                         if (!err) {
                             console.log('incremented age by 1', acc.get('status'));
@@ -385,14 +386,14 @@ var getMining = function(req, res) {
     Block.create({
         hash : blockNum,
         previousHash : blockNum - 1,
-        start : 0,
-        matches : [],
+        start : inx,
         transactions : numTransactions
     }, function(err, post) {
         console.log(post);
+        blockNum++;
+        res.redirect('/');
     });
-    blockNum++;
-    res.redirect('/');
+
 }
 
 var routes = {
