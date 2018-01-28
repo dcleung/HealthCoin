@@ -41,7 +41,7 @@
           <input id="upload" type="file" class="input-file" name="file-upload"></input>
 
           <label for="file-upload" class="tc b mh3 ph4 pv3 input-reset ba pa4 b--black bg-transparent grow pointer f6 bg-animate hover-bg-black hover-white">
-            <span class="pr1">Upload gnome file</span>
+            <span class="pr1">Upload genome file</span>
             <i data-feather="upload" width="16" class="w1 v-mid"></i>
           </label>
 
@@ -49,40 +49,43 @@
 
 
         <form class="flex justify-between flex-grow-1 justify-around items-center" action="/postnewjob" method="post">
-
             <div class="">
-              <p>Insert your genome:</p>
-              <input class="" type="text" name="inputGenome" placeholder="AC, AA, TC, GC">
+              <p>Name your sequence:</p>
+              <input class="" type="text" name="inputName" placeholder="Bob's job">
             </div>
 
             <div class="">
-              <p>Payment</p>
+              <p>Paste your genome:</p>
+              <input class="" type="text" name="inputGenome" placeholder="AC, AA, TC, GC...">
+            </div>
+
+            <div class="">
+              <p>Payment (in HealthCoins)</p>
               <input class="" type="number" name="inputCost" placeholder="100">
               <span><%= error %></span>
             </div>
             <div class="">
 
-              <button type="submit" class="tc b ph4 pv3 input-reset ba pa4 b--black bg-transparent grow pointer f6 bg-animate hover-bg-black hover-white" name="new-job">Submit files</button>
+              <button type="submit" class="tc b ph4 pv3 input-reset ba pa4 b--black bg-transparent grow pointer f6 bg-animate hover-bg-black hover-white" name="new-job">Submit for sequencing</button>
             </div>
 
         </form>
     </div>
 
     <div class="pa3 tl">
-
         <h2>Submitted Sequences:</h2>
         <table class="collapse ba tl br2 b--black-10 pv2 ph3 mt4">
           <tbody>
             <tr class="striped--near-white">
-              <th scope="col" class="pv2 ph3 ttu tl f6 fw6 tt">SequenceID</th>
+              <th scope="col" class="pv2 ph3 ttu tl f6 fw6 tt">Sequence Name</th>
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Date Submitted</th>
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Genome</th>
-              <th scope="col" class="f6 ttu fw6 pv2 ph3">Cost (in HealthCoins)</th>
+              <th scope="col" class="f6 ttu fw6 pv2 ph3">Payment (in HealthCoins)</th>
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Status</th>
             </tr>
             <% for(var i=0; i < items.length; i++) { %>
                <tr class="striped--near-white">
-                 <td class="pv2 ph3"><%= items[i].JobID %></td>
+                 <td class="pv2 ph3"><%= items[i].name %></td>
                  <td class="pv2 ph3"><%= items[i].createdAt %></td>
                  <td class="pv2 ph3"><%= items[i].genome %></td>
                  <td class="pv2 ph3"><%= items[i].cost %></td>
@@ -92,6 +95,50 @@
           </tbody>
           </table>
     <div>
+
+    <div>
+      <h2>Transactions</h2>
+      <form class="" action="/posttransaction" method="post">
+
+      <div class="">
+        <p>Recipient's Wallet Key:</p>
+        <input class="" type="text" name="inputWallet" placeholder="c329b19-0537-4755-bfdf-9c908e3b0664">
+      </div>
+
+      <div class="">
+        <p>Amount:</p>
+        <input class="" type="text" name="inputAmount" placeholder="100 HC">
+      </div>
+
+      <button type="submit" class="tc b ph4 pv3 input-reset ba pa4 b--black bg-transparent grow pointer f6 bg-animate hover-bg-black hover-white" name="new-job">Make transaction</button>
+      </form>
+
+      <br>
+      <h4>All pending transactions:</h4>
+       <table class="collapse ba tl br2 b--black-10 pv2 ph3 mt4">
+          <tbody>
+            <tr class="striped--near-white">
+              <th scope="col" class="pv2 ph3 ttu tl f6 fw6 tt">Block</th>
+              <th scope="col" class="f6 ttu fw6 pv2 ph3">Confirmed</th>
+              <th scope="col" class="f6 ttu fw6 pv2 ph3">Received Time</th>
+              <th scope="col" class="f6 ttu fw6 pv2 ph3">Sender</th>
+              <th scope="col" class="f6 ttu fw6 pv2 ph3">Receiver</th>
+              <th scope="col" class="f6 ttu fw6 pv2 ph3">Amount</th>
+            </tr>
+
+            <% for(var i=0; i < transactions.length; i++) { %>
+               <tr class="striped--near-white">
+                 <td class="pv2 ph3"><%= transactions[i].block %></td>
+                 <td class="pv2 ph3"><%= transactions[i].confirmed %></td>
+                 <td class="pv2 ph3"><%= transactions[i].createdAt %></td>
+                 <td class="pv2 ph3"><%= transactions[i].sender %></td>
+                 <td class="pv2 ph3"><%= transactions[i].receiver %></td>
+                 <td class="pv2 ph3"><%= transactions[i].amount %></td>
+               </tr>
+            <% } %>
+          </tbody>
+          </table>
+    </div>
 
     <script>
       feather.replace()

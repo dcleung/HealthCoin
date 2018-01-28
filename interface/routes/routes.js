@@ -56,10 +56,27 @@ var Block = vogels.define('Block', {
   }
 });
 
+var Transaction = vogels.define('Transaction', {
+  hashKey : 'transID',
+
+  timestamps : true,
+
+  schema : {
+    transID : vogels.types.uuid(),
+    block : Joi.string(),
+    confirmed : Joi.string(),
+    timestamp : Joi.number(),
+    sender : Joi.string(),
+    receiver : Joi.string(),
+    amount : Joi.number()
+  }
+});
+
 vogels.createTables({
     'Account' : {readCapacity: 1, writeCapacity: 10},
     'Job' : {readCapacity: 1, writeCapacity: 10},
-    'Block' : {readCapacity: 1, writeCapacity: 10}
+    'Block' : {readCapacity: 1, writeCapacity: 10},
+    'Transaction' : {readCapacity: 1, writeCapacity: 10},    
 }, function (err) {
   if(err) {
     console.log('Error creating tables', err);
@@ -75,21 +92,30 @@ var getHome = function(req, res) {
     }
     Job.scan().where('user').equals(req.session.username).loadAll().exec(function(err, resp) {
         var itemValues = [];
+        var transValues = [];
         if (resp) {
-            items = resp.Items;
-            /*items.sort(function(a, b) {
-                return parseFloat(a.attrs.msgID) - parseFloat(b.attrs.msgID);
-            });*/
-            var size = Object.keys(items).length;
-            for (var i = 0; i < size; i++) {
-                itemValues.push(items[i].attrs);
-            }
+            Transaction.scan().loadAll().exec(function(err2, resp2) {
+                if (resp2) {                   
+                    items = resp.Items;
+                    var size = Object.keys(items).length;
+                    for (var i = 0; i < size; i++) {
+                        itemValues.push(items[i].attrs);
+                    }
+
+                    items2 = resp2.Items;
+                    console.log(items2);
+                    var size2 = Object.keys(items2).length;
+                    for (var j = 0; j < size2; j++) {
+                        transValues.push(items2[j].attrs);
+                    }
+                }
+                console.log(transValues);
+                res.render('index.ejs', {
+                    name: req.session.username , balance: req.session.balance , error: req.session.message, items : itemValues, userID : req.session.userID, transactions : transValues
+                });
+            });
         }
-        console.log(itemValues);
-        res.render('index.ejs', {
-            name: req.session.username , balance: req.session.balance , error: null, items : itemValues, userID : req.session.userID
-        });
-    });
+    })
 }
 
 /* GET mining page. */
@@ -126,21 +152,49 @@ var postJob = function(req, res) {
     if (!cost || !name || !genome) {
         req.session.message = "missing inputs";
         res.redirect('/');
-    }
-
-    Job.create({
-                cost : cost,
-                name : name,
-                genome : genome,
-                status : 'Incomplete',
-                user : req.session.username
-            }, function(err, post) {
-                if (err) {
-                    res.render('index.ejs', { error: 'Error accessing database' , balance: '0'});
-                } else {
+    } else {
+        Job.create({
+                    cost : cost,
+                    name : name,
+                    genome : genome,
+                    status : 'Incomplete',
+                    user : req.session.username
+                }, function(err, post) {
+                    if (err) {
+                        res.render('index.ejs', { error: 'Error accessing database' , balance: '0'});
+                    } else {
+                        req.session.message = null;
                         res.redirect('/');
-                };
-    });
+                    };
+        });
+    }
+}
+
+/* POST job page. */
+var postTransaction = function(req, res) {
+    var recipient = req.body.inputWallet;
+    var amount = req.body.inputAmount;
+
+    if (!recipient || !amount) {
+        console.log("missing inputs")
+        req.session.message = "missing inputs";
+        res.redirect('/');
+    } else {
+        Transaction.create({
+                    block : 'Unconfirmed',
+                    confirmed : 'Unconfirmed',
+                    sender : req.session.userID,
+                    receiver : recipient,
+                    amount : amount
+                }, function(err, post) {
+                    if (err) {
+                        res.render('index.ejs', { error: 'Error accessing database' , balance: '0'});
+                    } else {
+                        req.session.message = null;
+                        res.redirect('/');
+                    };
+        });
+    }
 }
 
 /* POST account page. */
@@ -216,6 +270,10 @@ var postanswer = function(req, res) {
     // Do something with the answer and thus block
 }
 
+var getDNA = function(req, res) {
+    res.send(JSON.stringify(req.app.jobObject));
+}
+
 var routes = {
     getHome : getHome,
     postJob : postJob,
@@ -226,7 +284,8 @@ var routes = {
     getSignup : getSignup,
     postCheck : postCheck,
     getDNA : getDNA,
-    postanswer : postanswer
+    postanswer : postanswer,
+    postTransaction : postTransaction
 };
 
 module.exports = routes;
