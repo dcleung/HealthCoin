@@ -49,19 +49,19 @@
                 <!-- <p>Name your sequence:</p>
                 <input class="" type="text" name="inputName" placeholder="Bob's job"> -->
 
-                <label for="inputName" class="f6 b db mb2">Name your sequence:</label>
+                <label for="inputName" class="f7 b ttu gray db mb2 mt1" >Name your sequence:</label>
                 <input id="inputName" placeholder="Bob's job" class="input-reset ba b--black-20 pa3 db" type="text" aria-describedby="inputName-desc" style="margin-bottom: 1.80rem;">
                 <!-- <small id="inputName-desc" class="f6 black-60 db mb2">Helper text for the form control.</small> -->
 
               </div>
               <div class="">
-                <label for="inputGenome" class="f6 b db mb2">Genome Type:</label>
+                <label for="inputGenome" class="f7 b ttu gray db mb2 mt1">Genome Type:</label>
                 <input class="input-reset ba b--black-20 pa3  db" type="text" aria-describedby="inputName-desc" type="text" name="inputGenome" placeholder="AC, AA, TC, GC..." style="margin-bottom: 1.80rem;">
               </div>
 
               <div class="">
 
-                <label for="inputCost" class="f6 b db mb2">Payment<span class="normal black-60">(HealthCoins)</span></label>
+                <label for="inputCost" class="f7 b ttu gray db mb2 mt1">Payment<span class="normal black-60">(HealthCoins)</span></label>
                 <input name="inputCost" id="inputCost" class="input-reset ba b--black-20 pa3 db" type="number" aria-describedby="inputCost-desc" style="margin-bottom: 1.80rem;">
                 <!-- <small id="inputCost-desc" class="f6 black-60 db mb2"><%= error %></small> -->
               </div>
@@ -80,11 +80,11 @@
         <table class="w-100 collapse ba tl br2 b--black-10 pv2 ph3 mt4">
           <tbody>
             <tr class="striped--near-white">
-              <th scope="col" class="pv2 ph3 ttu tl f6 fw6 tt">Sequence Name</th>
-              <th scope="col" class="f6 ttu fw6 pv2 ph3">Date Submitted</th>
-              <th scope="col" class="f6 ttu fw6 pv2 ph3">Genome</th>
-              <th scope="col" class="f6 ttu fw6 pv2 ph3">Payment (in HealthCoins)</th>
-              <th scope="col" class="f6 ttu fw6 pv2 ph3">Status</th>
+              <th scope="col" class="pv2 ph3 ttu tl f7 fw6 tt">Sequence Name</th>
+              <th scope="col" class="f7 ttu fw6 pv2 ph3">Date Submitted</th>
+              <th scope="col" class="f7 ttu fw6 pv2 ph3">Genome</th>
+              <th scope="col" class="f7 ttu fw6 pv2 ph3">Payment (in HealthCoins)</th>
+              <th scope="col" class="f7 ttu fw6 pv2 ph3">Status</th>
             </tr>
             <% for(var i=0; i < items.length; i++) { %>
                <tr class="striped--near-white">
@@ -107,24 +107,7 @@
           </table>
     <div>
 
-    <div>
-      <h2>Transactions</h2>
-      <form class="" action="/posttransaction" method="post">
 
-      <div class="">
-        <p>Recipient's Wallet Key:</p>
-        <input class="" type="text" name="inputWallet" placeholder="c329b19-0537-4755-bfdf-9c908e3b0664">
-      </div>
-
-      <div class="">
-        <p>Amount:</p>
-        <input class="" type="text" name="inputAmount" placeholder="100 HC">
-      </div>
-
-      <button type="submit" class="tc b ph4 pv3 input-reset ba pa4 b--black bg-transparent grow pointer f6 bg-animate hover-bg-black hover-white" name="new-job">Make transaction</button>
-      </form>
-
-      <br>
 
 
       <h2>All pending transactions:</h2>
@@ -132,12 +115,12 @@
        <table class="w-100 collapse ba tl br2 b--black-10 pv2 ph3 mt4">
           <tbody>
             <tr class="striped--near-white">
-              <th scope="col" class="pv2 ph3 ttu tl f6 fw6 tt">Block</th>
-              <th scope="col" class="f6 ttu fw6 pv2 ph3">Confirmed</th>
-              <th scope="col" class="f6 ttu fw6 pv2 ph3">Received Time</th>
-              <th scope="col" class="f6 ttu fw6 pv2 ph3">Sender</th>
-              <th scope="col" class="f6 ttu fw6 pv2 ph3">Receiver</th>
-              <th scope="col" class="f6 ttu fw6 pv2 ph3">Amount</th>
+              <th scope="col" class="pv2 ph3 ttu tl f7 fw6 tt">Block</th>
+              <th scope="col" class="f7 ttu fw6 pv2 ph3">Confirmed</th>
+              <th scope="col" class="f7 ttu fw6 pv2 ph3">Received Time</th>
+              <th scope="col" class="f7 ttu fw6 pv2 ph3">Sender</th>
+              <th scope="col" class="f7 ttu fw6 pv2 ph3">Receiver</th>
+              <th scope="col" class="f7 ttu fw6 pv2 ph3">Amount</th>
             </tr>
 
             <% for(var i=0; i < transactions.length; i++) { %>
@@ -189,6 +172,29 @@
     </div>
 
 
+    <article class="mw6 center tc bg-white br3 pa3 pa4-ns mb3 mt6 ba b--black-10">
+      <div class="tc mb4">
+
+        <h1 class="f4 mt0">Transfer some HTCs</h1>
+
+      </div>
+      <p class="lh-copy measure center f6 black-70 mt3">
+      </p><form class="AVAST_PAM_nonloginform" action="/posttransaction" method="post">
+
+        <div class="mb4">
+          <label class="f7 b ttu gray db mb2 mt1">Recipient's Wallet Key:</label>
+          <input class="tc f6 input-reset w-100 ba b--black-20 pa3 db" type="text" name="inputWallet" placeholder="person's key">
+        </div>
+
+        <div class="mb4">
+          <label class="f7 b ttu gray db mb2 mt1">Amount:</label>
+          <input class="tc input-reset w-100 ba b--black-20 pa3 db" type="text" name="inputAmount" placeholder="100 HC">
+        </div>
+
+        <button type="submit" class="tc b ph4 pv3 input-reset ba pa4 b--black bg-transparent grow pointer f6 bg-animate hover-bg-black hover-white" name="new-job">Make transaction</button>
+      </form>
+
+    </article>
 
 
     <div class="center ph3-l ph2">
