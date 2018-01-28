@@ -5,13 +5,12 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-app.require('async');
+
 
 
 var routes = require('./routes/routes');
 
 var app = express();
-
 app.use(express.bodyParser());
 app.use(express.logger("default"));
 app.use(express.cookieParser());
@@ -28,7 +27,7 @@ app.use(function(req, res, next) {
 });
 
 var lineReader = require('readline').createInterface({
-  input: require('fs').createReadStream('../dna.txt')
+  input: require('fs').createReadStream('../dna_subset.txt')
 });
 
 lineReader.on('line', function (line) {
@@ -36,11 +35,11 @@ lineReader.on('line', function (line) {
 });
 
 var fs = require("fs");
-var text = fs.readFileSync("../dna.txt")..toString('utf-8');
+var text = fs.readFileSync("../dna_subset.txt").toString('utf-8');
 var genome = text.split("\n")
 
 var fs = require("fs");
-var text = fs.readFileSync("../gene.txt")..toString('utf-8');
+var text = fs.readFileSync("../dna_subset.txt").toString('utf-8');
 var gene = text.split("\n")
 
 var matchingRate = 0.80;
@@ -60,6 +59,7 @@ app.use('/postnewaccount', routes.postAccount);
 app.use('/checkaccount', routes.postCheck);
 app.use('/signup', routes.getSignup);
 app.use('/getDNA', routes.getDNA);
+app.use('/posttransaction', routes.postTransaction);
 
 // DEFAULT
 app.use('/', routes.getHome);
