@@ -87,7 +87,7 @@ var getHome = function(req, res) {
         }
         console.log(itemValues);
         res.render('index.ejs', {
-            name: req.session.username , balance: req.session.balance , error: null, items : itemValues, userID : req.session.userID
+            name: req.session.username , balance: req.session.balance , error: req.session.message, items : itemValues, userID : req.session.userID
         });
     });
 }
@@ -126,21 +126,22 @@ var postJob = function(req, res) {
     if (!cost || !name || !genome) {
         req.session.message = "missing inputs";
         res.redirect('/');
-    }
-
-    Job.create({
-                cost : cost,
-                name : name,
-                genome : genome,
-                status : 'Incomplete',
-                user : req.session.username
-            }, function(err, post) {
-                if (err) {
-                    res.render('index.ejs', { error: 'Error accessing database' , balance: '0'});
-                } else {
+    } else {
+        Job.create({
+                    cost : cost,
+                    name : name,
+                    genome : genome,
+                    status : 'Incomplete',
+                    user : req.session.username
+                }, function(err, post) {
+                    if (err) {
+                        res.render('index.ejs', { error: 'Error accessing database' , balance: '0'});
+                    } else {
+                        req.session.message = null;
                         res.redirect('/');
-                };
-    });
+                    };
+        });
+    }
 }
 
 /* POST account page. */
