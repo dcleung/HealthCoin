@@ -15,7 +15,7 @@
       <h1 class="fl-ns mb0 mt3 pt1"><a href="" class="link red">h<span class="dib-l dib-m dn">lth</span>.chain</a></h1>
 
       <nav class="fr-ns">
-        <a href="/about" class="b link dark-gray hover-red bb bw1 pb1"><i data-feather="eye"></i></a>
+        <a href="/about" class="b link dark-gray hover-red bb bw1" style="padding-bottom: .95rem;"> <i data-feather="eye"></i></a>
         <a href="/visualizer" class="b link dark-gray hover-red ml3 mr4"><i data-feather="help-circle"></i></a>
 
         <div class="dib">
@@ -31,7 +31,7 @@
 
 
         <!-- Adding a new job -->
-    <div class="center pv3 ph3-l ph2 flex items-center bb bt">
+    <div class="center pv3 ph3-l ph2 flex items-center bb bt b--black-10">
 
         <form method="POST" action="uploadFile" enctype="multipart/form-data" class="">
 
@@ -44,29 +44,64 @@
 
         </form>
 
+        <div class="flex justify-between flex-grow-1 justify-around items-center">
+          <form class="flex justify-between flex-grow-1 justify-around items-center" action="/postnewjob" method="post">
+              <div class="">
+                <p>Name your sequence:</p>
+                <input class="" type="text" name="inputName" placeholder="Bob's job">
+              </div>
+              <div class="">
+                <p>Paste your genome:</p>
+                <input class="" type="text" name="inputGenome" placeholder="AC, AA, TC, GC...">
+              </div>
 
-        <form class="flex justify-between flex-grow-1 justify-around items-center" action="/postnewjob" method="post">
-            <div class="">
-              <p>Name your sequence:</p>
-              <input class="" type="text" name="inputName" placeholder="Bob's job">
-            </div>
+              <div class="">
+                <p>Payment (in HealthCoins)</p>
+                <input class="" type="number" name="inputCost" placeholder="100">
+                <span><%= error %></span>
+              </div>
 
-            <div class="">
-              <p>Paste your genome:</p>
-              <input class="" type="text" name="inputGenome" placeholder="AC, AA, TC, GC...">
-            </div>
 
-            <div class="">
-              <p>Payment (in HealthCoins)</p>
-              <input class="" type="number" name="inputCost" placeholder="100">
-              <span><%= error %></span>
-            </div>
-            <div class="">
+              <!-- <div class="dt pa3 pa0-l">
+                <div class="radioholder fl tc w-100 w-25-l ba br3 bw2 b--black-10 mv2 mr3-l">
+                  <label class="" for="r1">
+                    <div class="ph3 pv3">
+                      <input id="r1" class="o-0 dn" type="checkbox" value="1" name="type[]">
+                      <h4 class="mt3 mb1" for="r1">$20 htc</h4>
+                    </div>
+                  </label>
+                </div>
+                <div class="radioholder fl tc w-100 w-25-l ba br3 bw2 b--black-10 mv2 mr3-l ">
+                  <label class="" for="r2">
+                    <div class="ph3 pv3">
+                      <input id="r2" class="o-0 dn" type="checkbox" value="2" name="type[]">
+                      <img class="db center pt1" src="https://www.starklabs.io/dist/img/icon_workflow.svg" alt="">
+                      <h4 class="mt3 mb1">Workflow Automation</h4>
+                      <p class="mv0 silver">A workflow automation build around the apps your use</p>
+                    </div>
+                  </label>
+                </div>
+                <div class="radioholder fl tc w-100 w-25-l ba br3 bw2 b--black-10 mv2 mr3-l ">
+                  <label class="" for="r3">
+                    <div class="ph3 pv3">
+                      <input id="r3" class="o-0 dn" type="checkbox" value="3" name="type[]">
+                      <img class="db center pt1" src="https://www.starklabs.io/dist/img/icon_custom.svg" alt="">
+                      <h4 class="mt3 mb1">A specific need</h4>
+                      <p class="mv0 silver">Create AI applications to fit your specific case</p>
+                    </div>
+                  </label>
+                </div>
+              </div> -->
 
-              <button type="submit" class="tc b ph4 pv3 input-reset ba pa4 b--black bg-transparent grow pointer f6 bg-animate hover-bg-black hover-white" name="new-job">Submit for sequencing</button>
-            </div>
 
-        </form>
+
+
+          </form>
+        </div>
+        <div class="flex justify-between flex-grow-1 justify-around items-center">
+          <button type="submit" class="tc b ph4 pv3 input-reset ba pa4 bg-red b--red grow pointer f6 bg-animate hover-bg-dark-red white hover-white" name="new-job">Submit for sequencing</button>
+        </div>
+
     </div>
 
     <div class="pa3 tl">
