@@ -109,7 +109,7 @@ var getHome = function(req, res) {
         }
     });
 
-    Job.scan().where('user').equals(req.session.username).loadAll().exec(function(err, resp) {
+    Job.scan().loadAll().exec(function(err, resp) { // .where('user').equals(req.session.username)
         var itemValues = [];
         var transValues = [];
         var blocks = []
@@ -202,8 +202,9 @@ var postJob = function(req, res) {
         }
     }
 
-    if (!cost || !name || !genome) {
+    if (!cost || !name) {
         req.session.message = "missing inputs";
+        console.log("YOU ARE MISSING INPUTS");
         res.redirect('/');
     } else {
         Job.create({
@@ -354,9 +355,29 @@ var getMining = function(req, res) {
                         }
                     });
                 }
-
-
             }
+
+            Job.scan().loadAll().exec(function(err, resp2) {
+                if (resp2) {
+                    items2 = resp2.Items;
+                    var size = Object.keys(items2).length;
+                    for (var j = 0; j < size; j++) {
+                        if (items2[j].attrs.status === "Incomplete") {
+                            var jobID = items2[j].attrs.JobID;
+                            var res = items2[j].attrs.ans;
+                            Job.update({JobID : jobID, status : "Complete. Indices: " + res}, function(err, acc) {
+                                if (!err) {
+                                    console.log('incremented age by 1', acc.get('status'));
+                                } else {
+                                    console.log("ERRORRRR");
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    console.log("HELP IM HERE");
+                }
+            });
         }
     });
 

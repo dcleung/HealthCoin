@@ -50,7 +50,7 @@
                 <input class="" type="text" name="inputName" placeholder="Bob's job"> -->
 
                 <label for="inputName" class="f6 b db mb2">Name your sequence:</label>
-                <input id="inputName" placeholder="Bob's job" class="input-reset ba b--black-20 pa3 db" type="text" aria-describedby="inputName-desc" style="margin-bottom: 1.80rem;">
+                <input name="inputName" id="inputName" placeholder="Bob's job" class="input-reset ba b--black-20 pa3 db" type="text" aria-describedby="inputName-desc" style="margin-bottom: 1.80rem;">
                 <!-- <small id="inputName-desc" class="f6 black-60 db mb2">Helper text for the form control.</small> -->
 
               </div>
@@ -63,17 +63,17 @@
 
                 <label for="inputCost" class="f6 b db mb2">Payment<span class="normal black-60">(HealthCoins)</span></label>
                 <input name="inputCost" id="inputCost" class="input-reset ba b--black-20 pa3 db" type="number" aria-describedby="inputCost-desc" style="margin-bottom: 1.80rem;">
-                <small id="inputCost-desc" class="f6 black-60 db mb2"><%= error %></small>
+                <!--<small id="inputCost-desc" class="f6 black-60 db mb2"><%= error %></small>-->
 
               </div>
 
 
-          </form>
+
         </div>
         <div class="flex justify-between flex-grow-1 justify-around items-center">
           <button type="submit" class="tc b ph4 pv3 input-reset ba pa4 bg-red b--red grow pointer f6 bg-animate hover-bg-dark-red white hover-white" name="new-job">Submit for sequencing</button>
         </div>
-
+          </form>
     </div>
 
     <div class="pa3 tl">
