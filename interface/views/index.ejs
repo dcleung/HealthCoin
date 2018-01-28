@@ -8,7 +8,6 @@
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css"/> -->
     <link rel="stylesheet" href="https://unpkg.com/tachyons@4.9.1/css/tachyons.min.css"/>
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
-
   </head>
     <!-- /*white bg-black is-in*/ -->
     <header class="cf ph3">
@@ -114,14 +113,22 @@
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Genome</th>
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Payment (in HealthCoins)</th>
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Status</th>
-            </tr>
+            </tr> 
             <% for(var i=0; i < items.length; i++) { %>
                <tr class="striped--near-white">
                  <td class="pv2 ph3"><%= items[i].name %></td>
                  <td class="pv2 ph3"><%= items[i].createdAt %></td>
                  <td class="pv2 ph3"><%= items[i].genome %></td>
                  <td class="pv2 ph3"><%= items[i].cost %></td>
-                 <td class="pv2 ph3"><%= items[i].status %></td>
+
+                 <% if (items[i].status === 'Incomplete') { %>
+                  <td class="pv2 ph3"><%= items[i].status %></td>
+                  <!-- <td class="pv2 ph3">Compute this!</td> -->
+
+                <%} else {%>
+                  <td class="pv2 ph3 trash"><%= items[i].status %></td>
+                <% } %>
+
                </tr>
             <% } %>
           </tbody>
@@ -166,6 +173,27 @@
                  <td class="pv2 ph3"><%= transactions[i].sender %></td>
                  <td class="pv2 ph3"><%= transactions[i].receiver %></td>
                  <td class="pv2 ph3"><%= transactions[i].amount %></td>
+               </tr>
+            <% } %>
+          </tbody>
+          </table>
+
+          <h2>Current Blockchain:</h2>
+          <table class="collapse ba tl br2 b--black-10 pv2 ph3 mt4">
+          <tbody>
+            <tr class="striped--near-white">
+              <th scope="col" class="pv2 ph3 ttu tl f6 fw6 tt">Block ID</th>
+              <th scope="col" class="f6 ttu fw6 pv2 ph3">Previous Block</th>
+              <th scope="col" class="f6 ttu fw6 pv2 ph3">Date Created</th>
+              <th scope="col" class="f6 ttu fw6 pv2 ph3">Transactions</th>
+            </tr>
+
+            <% for(var i=0; i < transactions.length; i++) { %>
+               <tr class="striped--near-white">
+                 <td class="pv2 ph3"><%= transactions[i].block %></td>
+                 <td class="pv2 ph3"><%= transactions[i].confirmed %></td>
+                 <td class="pv2 ph3"><%= transactions[i].createdAt %></td>
+                 <td class="pv2 ph3"><%= transactions[i].sender %></td>
                </tr>
             <% } %>
           </tbody>
