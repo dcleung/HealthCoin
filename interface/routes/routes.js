@@ -37,9 +37,29 @@ var Job = vogels.define('Job', {
   }
 });
 
+var Block = vogels.define('Block', {
+  hashKey : 'hash',
+
+  timestamps : true,
+
+  schema : {
+    hash : Joi.string(),
+    index : Joi.number(),
+    previousHash : Joi.string(),
+    timestamp : Joi.number(),
+    data : {
+      start      : Joi.number(),
+      matches : vogels.types.numberSet()
+    },
+    difficulty : Joi.number(),
+    nonce : Joi.number()
+  }
+});
+
 vogels.createTables({
     'Account' : {readCapacity: 1, writeCapacity: 10},
     'Job' : {readCapacity: 1, writeCapacity: 10},
+    'Block' : {readCapacity: 1, writeCapacity: 10}
 }, function (err) {
   if(err) {
     console.log('Error creating tables', err);
@@ -191,7 +211,7 @@ var getSignup = function(req, res) {
 }
 
 /* receive the answer */
-var postanswer function(req, res) {
+var postanswer = function(req, res) {
     var answer = req.body;
     // Do something with the answer and thus block
 }
