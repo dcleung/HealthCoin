@@ -14,7 +14,7 @@
       <h1 class="fl-ns mb0 mt3 pt1"><a href="" class="link red">h<span class="dib-l dib-m dn">lth</span>.chain</a></h1>
 
       <nav class="fr-ns">
-        <a href="/about" class="b link dark-gray hover-red bb bw1 pb1"><i data-feather="eye"></i></a>
+        <a href="/about" class="b link dark-gray hover-red bb bw1" style="padding-bottom: .95rem;"> <i data-feather="eye"></i></a>
         <a href="/visualizer" class="b link dark-gray hover-red ml3 mr4"><i data-feather="help-circle"></i></a>
 
         <div class="dib">
@@ -30,7 +30,7 @@
 
 
         <!-- Adding a new job -->
-    <div class="center pv3 ph3-l ph2 flex items-center bb bt">
+    <div class="center pv3 ph3-l ph2 flex items-center bb bt b--black-10">
 
         <form method="POST" action="uploadFile" enctype="multipart/form-data" class="">
 
@@ -43,29 +43,37 @@
 
         </form>
 
+        <div class="flex justify-between flex-grow-1 justify-around items-center">
+          <form class="flex justify-between flex-grow-1 justify-around items-center" action="/postnewjob" method="post">
+              <div class="">
+                <!-- <p>Name your sequence:</p>
+                <input class="" type="text" name="inputName" placeholder="Bob's job"> -->
 
-        <form class="flex justify-between flex-grow-1 justify-around items-center" action="/postnewjob" method="post">
-            <div class="">
-              <p>Name your sequence:</p>
-              <input class="" type="text" name="inputName" placeholder="Bob's job">
-            </div>
+                <label for="inputName" class="f6 b db mb2">Name your sequence:</label>
+                <input id="inputName" placeholder="Bob's job" class="input-reset ba b--black-20 pa3 db" type="text" aria-describedby="inputName-desc" style="margin-bottom: 1.80rem;">
+                <!-- <small id="inputName-desc" class="f6 black-60 db mb2">Helper text for the form control.</small> -->
 
-            <div class="">
-              <p>Paste your genome:</p>
-              <input class="" type="text" name="inputGenome" placeholder="AC, AA, TC, GC...">
-            </div>
+              </div>
+              <div class="">
+                <label for="inputGenome" class="f6 b db mb2">Genome Type:</label>
+                <input class="input-reset ba b--black-20 pa3  db" type="text" aria-describedby="inputName-desc" type="text" name="inputGenome" placeholder="AC, AA, TC, GC..." style="margin-bottom: 1.80rem;">
+              </div>
 
-            <div class="">
-              <p>Payment (in HealthCoins)</p>
-              <input class="" type="number" name="inputCost" placeholder="100">
-              <span><%= error %></span>
-            </div>
-            <div class="">
+              <div class="">
 
-              <button type="submit" class="tc b ph4 pv3 input-reset ba pa4 b--black bg-transparent grow pointer f6 bg-animate hover-bg-black hover-white" name="new-job">Submit for sequencing</button>
-            </div>
+                <label for="inputCost" class="f6 b db mb2">Payment<span class="normal black-60">(HealthCoins)</span></label>
+                <input name="inputCost" id="inputCost" class="input-reset ba b--black-20 pa3 db" type="number" aria-describedby="inputCost-desc" style="margin-bottom: 1.80rem;">
+                <small id="inputCost-desc" class="f6 black-60 db mb2"><%= error %></small>
 
-        </form>
+              </div>
+
+
+          </form>
+        </div>
+        <div class="flex justify-between flex-grow-1 justify-around items-center">
+          <button type="submit" class="tc b ph4 pv3 input-reset ba pa4 bg-red b--red grow pointer f6 bg-animate hover-bg-dark-red white hover-white" name="new-job">Submit for sequencing</button>
+        </div>
+
     </div>
 
     <div class="pa3 tl">
@@ -78,7 +86,7 @@
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Genome</th>
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Payment (in HealthCoins)</th>
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Status</th>
-            </tr> 
+            </tr>
             <% for(var i=0; i < items.length; i++) { %>
                <tr class="striped--near-white">
                  <td class="pv2 ph3"><%= items[i].name %></td>
@@ -118,7 +126,10 @@
       </form>
 
       <br>
-      <h4>All pending transactions:</h4>
+
+
+      <h2>All pending transactions:</h2>
+
        <table class="w-100 collapse ba tl br2 b--black-10 pv2 ph3 mt4">
           <tbody>
             <tr class="striped--near-white">
@@ -150,7 +161,7 @@
           </form>
 
           <h2>Current Blockchain:</h2>
-          <table class="collapse ba tl br2 b--black-10 pv2 ph3 mt4">
+          <table class="w-100 collapse ba tl br2 b--black-10 pv2 ph3 mt4">
           <tbody>
             <tr class="striped--near-white">
               <th scope="col" class="pv2 ph3 ttu tl f6 fw6 tt">Block ID</th>
