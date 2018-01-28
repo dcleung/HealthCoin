@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HealthCoin</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.9.1/css/tachyons.min.css"/>
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+  </head>
+  <body>
+    <h3>HealthCoin - Mining for <i>Your</i> Health</h3>
+
+    <h4>Log in</h4>
+    <form action="/checkaccount" method="post">
+            <p>Username:</p>
+            <input class="input-field form-control" type="text" name="loginUsername">
+            <br>
+            <p>Password:</p>
+            <input class="input-field form-control" type="password" name="loginPassword">
+            <br>
+            <br>
+            <button type="submit" class="btn btn-primary" name="new-job">Log in</button>
+        </form>
+
+    <h5>Don't have an account? Sign up!</h5>
+            
+    <div style="padding: 50px">
+        <form action="/postnewaccount" method="post">
+            <p>Username:</p>
+            <input class="input-field form-control" type="text" name="inputUsername">
+            <br>
+            <p>Email:</p>
+            <input class="input-field form-control" type="text" name="inputEmail">
+            <br>
+            <p>Name:</p>
+            <input class="input-field form-control" type="text" name="inputName">
+            <p>Password:</p>
+            <input class="input-field form-control" type="password" name="inputPassword">
+            <br>
+            <p><%= error %></p>
+
+            <br>
+            <button type="submit" class="btn btn-primary" name="new-job">Sign me up!</button>
+        </form>
+    </div>
+
+  </body>
+</html>
