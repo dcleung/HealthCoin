@@ -46,53 +46,26 @@
         <div class="flex justify-between flex-grow-1 justify-around items-center">
           <form class="flex justify-between flex-grow-1 justify-around items-center" action="/postnewjob" method="post">
               <div class="">
-                <p>Name your sequence:</p>
-                <input class="" type="text" name="inputName" placeholder="Bob's job">
+                <!-- <p>Name your sequence:</p>
+                <input class="" type="text" name="inputName" placeholder="Bob's job"> -->
+
+                <label for="inputName" class="f6 b db mb2">Name your sequence:</label>
+                <input id="inputName" placeholder="Bob's job" class="input-reset ba b--black-20 pa3 db" type="text" aria-describedby="inputName-desc" style="margin-bottom: 1.80rem;">
+                <!-- <small id="inputName-desc" class="f6 black-60 db mb2">Helper text for the form control.</small> -->
+
               </div>
               <div class="">
-                <p>Paste your genome:</p>
-                <input class="" type="text" name="inputGenome" placeholder="AC, AA, TC, GC...">
+                <label for="inputGenome" class="f6 b db mb2">Genome Type:</label>
+                <input class="input-reset ba b--black-20 pa3  db" type="text" aria-describedby="inputName-desc" type="text" name="inputGenome" placeholder="AC, AA, TC, GC..." style="margin-bottom: 1.80rem;">
               </div>
 
               <div class="">
-                <p>Payment (in HealthCoins)</p>
-                <input class="" type="number" name="inputCost" placeholder="100">
-                <span><%= error %></span>
+
+                <label for="inputCost" class="f6 b db mb2">Payment<span class="normal black-60">(HealthCoins)</span></label>
+                <input name="inputCost" id="inputCost" class="input-reset ba b--black-20 pa3 db" type="number" aria-describedby="inputCost-desc" style="margin-bottom: 1.80rem;">
+                <small id="inputCost-desc" class="f6 black-60 db mb2"><%= error %></small>
+
               </div>
-
-
-              <!-- <div class="dt pa3 pa0-l">
-                <div class="radioholder fl tc w-100 w-25-l ba br3 bw2 b--black-10 mv2 mr3-l">
-                  <label class="" for="r1">
-                    <div class="ph3 pv3">
-                      <input id="r1" class="o-0 dn" type="checkbox" value="1" name="type[]">
-                      <h4 class="mt3 mb1" for="r1">$20 htc</h4>
-                    </div>
-                  </label>
-                </div>
-                <div class="radioholder fl tc w-100 w-25-l ba br3 bw2 b--black-10 mv2 mr3-l ">
-                  <label class="" for="r2">
-                    <div class="ph3 pv3">
-                      <input id="r2" class="o-0 dn" type="checkbox" value="2" name="type[]">
-                      <img class="db center pt1" src="https://www.starklabs.io/dist/img/icon_workflow.svg" alt="">
-                      <h4 class="mt3 mb1">Workflow Automation</h4>
-                      <p class="mv0 silver">A workflow automation build around the apps your use</p>
-                    </div>
-                  </label>
-                </div>
-                <div class="radioholder fl tc w-100 w-25-l ba br3 bw2 b--black-10 mv2 mr3-l ">
-                  <label class="" for="r3">
-                    <div class="ph3 pv3">
-                      <input id="r3" class="o-0 dn" type="checkbox" value="3" name="type[]">
-                      <img class="db center pt1" src="https://www.starklabs.io/dist/img/icon_custom.svg" alt="">
-                      <h4 class="mt3 mb1">A specific need</h4>
-                      <p class="mv0 silver">Create AI applications to fit your specific case</p>
-                    </div>
-                  </label>
-                </div>
-              </div> -->
-
-
 
 
           </form>
@@ -113,7 +86,7 @@
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Genome</th>
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Payment (in HealthCoins)</th>
               <th scope="col" class="f6 ttu fw6 pv2 ph3">Status</th>
-            </tr> 
+            </tr>
             <% for(var i=0; i < items.length; i++) { %>
                <tr class="striped--near-white">
                  <td class="pv2 ph3"><%= items[i].name %></td>
@@ -153,7 +126,10 @@
       </form>
 
       <br>
-      <h4>All pending transactions:</h4>
+
+
+      <h2>All pending transactions:</h2>
+
        <table class="w-100 collapse ba tl br2 b--black-10 pv2 ph3 mt4">
           <tbody>
             <tr class="striped--near-white">
@@ -179,7 +155,7 @@
           </table>
 
           <h2>Current Blockchain:</h2>
-          <table class="collapse ba tl br2 b--black-10 pv2 ph3 mt4">
+          <table class="w-100 collapse ba tl br2 b--black-10 pv2 ph3 mt4">
           <tbody>
             <tr class="striped--near-white">
               <th scope="col" class="pv2 ph3 ttu tl f6 fw6 tt">Block ID</th>
